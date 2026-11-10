@@ -10,6 +10,8 @@
 - Admin có thể thay ảnh bằng ảnh đúng mặt hàng tại **Admin → Sản phẩm → Sửa → Tải ảnh**. Ảnh upload lưu trong `storage/app/public/products/`, được ưu tiên hơn ảnh tham khảo và không tự push GitHub.
 - Sản phẩm mới do Admin tạo mà chưa upload ảnh vẫn hiển thị biểu tượng danh mục. **Ghi nguồn rõ ràng:** mỗi ảnh trong manifest có tác giả, liên kết gốc và đường dẫn giấy phép.
 
+- **Banner trang chủ** sử dụng ảnh chụp góc chơi game thật của Brian Wong (CC BY-SA 2.0), được lưu ở `public/images/real-products/hero-tech.webp`; nguồn ghi tại `/nguon-anh`.
+
 ## Chức năng
 
 - **Khách:** đăng ký, đăng nhập, đăng xuất; xem/tìm/lọc/sắp xếp sản phẩm, phân trang.

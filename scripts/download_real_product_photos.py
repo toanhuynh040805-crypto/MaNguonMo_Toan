@@ -87,7 +87,13 @@ def main():
         raise ValueError("Expected 15 catalog photographs")
     for p in photos:
         process(p)
-    print("DONE: 15 real photos downloaded and optimized", flush=True)
+
+    # Homepage uses a licensed photograph of a real gaming computer setup.
+    process({
+        "slug": "hero-tech",
+        "file": "Gaming PC-Setup - Astaroth- The Completed System.jpg",
+    })
+    print("DONE: 15 real product photos and one real desk setup photo", flush=True)
 
 
 if __name__ == "__main__":

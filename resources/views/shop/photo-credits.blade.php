@@ -7,6 +7,7 @@
         <p class="text-muted">Ảnh được cung cấp bởi các tác giả trên Wikimedia Commons theo giấy phép được ghi rõ bên dưới. Đây là ảnh chụp thiết bị cùng loại dùng cho đồ án, không phải ảnh giả lập hoặc do AI tạo ra.</p>
         <div class="alert alert-info">Tên, giá và thông số trong danh mục OpenShop là <strong>dữ liệu mẫu</strong>. Ảnh chụp có thể là sản phẩm của thương hiệu hoặc dung lượng khác, không chứng minh đặc tính kỹ thuật của sản phẩm đang được mô phỏng.</div>
     </div>
+    <div class="panel p-3 mb-3 small"><strong>Ảnh banner trang chủ:</strong> <a href="https://commons.wikimedia.org/wiki/File:Gaming_PC-Setup_-_Astaroth-_The_Completed_System.jpg" target="_blank" rel="noopener noreferrer">Gaming PC-Setup – Astaroth – The Completed System</a>, tác giả Brian Wong, <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a>. Ảnh gốc được điều chỉnh kích thước và chuyển sang WebP.</div>
     <div class="table-responsive panel">
         <table class="table table-hover align-middle mb-0">
             <thead><tr><th>Sản phẩm demo</th><th>Ảnh chụp thực tế</th><th>Tác giả</th><th>Giấy phép</th></tr></thead>

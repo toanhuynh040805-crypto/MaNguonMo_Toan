@@ -9,7 +9,7 @@
             <p class="hero-subtitle mb-4">Khám phá phụ kiện công nghệ hữu ích cho học tập, công việc và giải trí.</p>
             <a href="#danh-sach" class="btn btn-light rounded-pill fw-bold px-4 py-3">Khám phá sản phẩm ↗</a>
         </div>
-        <div class="hero-visual" aria-hidden="true"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><img src="{{ asset('images/hero-tech.svg') }}" class="hero-product-image" alt="" loading="eager" decoding="async"></div>
+        <div class="hero-visual" aria-hidden="true"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><img src="{{ asset('images/real-products/hero-tech.webp') }}" class="hero-product-image" alt="" loading="eager" decoding="async"></div>
     </div>
 </section>
 <section class="container pb-5" id="danh-sach">
