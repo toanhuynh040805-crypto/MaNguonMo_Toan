@@ -562,4 +562,70 @@ class OnlineShopTest extends TestCase
         ]))->assertSessionHasErrors('date_to');
     }
 
+
+    public function test_all_demo_catalog_images_are_committed_as_local_svg_files(): void
+    {
+        $slugs = [
+            'ban-phim-co-mini-68',
+            'ban-phim-van-phong-khong-day',
+            'ban-phim-co-rgb-tkl',
+            'chuot-khong-day-silent',
+            'chuot-gaming-6-nut',
+            'chuot-bluetooth-dual-mode',
+            'tai-nghe-chup-tai-studio',
+            'tai-nghe-co-day-type-c',
+            'loa-bluetooth-compact',
+            'de-laptop-nhom-gap-gon',
+            'cap-usb-c-100w-2m',
+            'hub-usb-c-5-trong-1',
+            'webcam-full-hd',
+            'lot-chuot-xl',
+            'o-cung-ssd-di-dong-512gb',
+        ];
+
+        foreach ($slugs as $slug) {
+            $this->assertFileExists(public_path('images/products/' . $slug . '.svg'));
+        }
+        $this->assertFileExists(public_path('images/hero-tech.svg'));
+    }
+
+    public function test_seeded_product_uses_committed_artwork_without_changing_database(): void
+    {
+        $category = Category::create(['name' => 'Bàn phím', 'slug' => 'ban-phim']);
+        $product = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Bàn phím cơ Mini 68',
+            'slug' => 'ban-phim-co-mini-68',
+            'price' => 790000,
+            'stock' => 18,
+            'is_active' => true,
+        ]);
+
+        $this->assertNull($product->image_path);
+        $this->assertStringContainsString(
+            '/images/products/ban-phim-co-mini-68.svg', $product->image_url
+        );
+        $this->get(route('home'))->assertOk()
+            ->assertSee('images/products/ban-phim-co-mini-68.svg', false);
+    }
+
+    public function test_uploaded_product_image_has_priority_over_demo_artwork(): void
+    {
+        $category = Category::create(['name' => 'Bàn phím', 'slug' => 'ban-phim']);
+        $product = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Bàn phím cơ Mini 68',
+            'slug' => 'ban-phim-co-mini-68',
+            'price' => 790000,
+            'stock' => 18,
+            'is_active' => true,
+            'image_path' => 'products/custom-image.jpg',
+        ]);
+
+        $this->assertStringContainsString(
+            '/storage/products/custom-image.jpg', $product->image_url
+        );
+        $this->assertStringNotContainsString('.svg', $product->image_url);
+    }
+
 }

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Ảnh minh họa webcam-full-hd">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8faff"/><stop offset=".58" stop-color="#e9f3fd"/><stop offset="1" stop-color="#e9eff9"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#ffffff" stop-opacity=".8"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="960" height="720" fill="url(#bg)"/>
+  <circle cx="770" cy="190" r="320" fill="url(#halo)" />
+  <circle cx="105" cy="580" r="210" fill="#456d9e" opacity=".06"/>
+  <path d="M0 610 Q480 490 960 610 L960 720 L0 720 Z" fill="#fff" opacity=".36"/>
+  <g transform="translate(165 106)">
+     <ellipse cx="314" cy="525" rx="266" ry="28" fill="#172342" opacity=".15"/>
+     <rect x="82" y="169" width="468" height="258" rx="106" fill="#202e4b" stroke="#869ab8" stroke-width="10"/>
+     <rect x="106" y="193" width="420" height="211" rx="86" fill="#34435e"/>
+     <circle cx="314" cy="299" r="112" fill="#121f38" stroke="#456d9e" stroke-width="16"/>
+     <circle cx="314" cy="299" r="88" fill="#2c4176" stroke="#8099cb" stroke-width="9"/>
+     <circle cx="314" cy="299" r="58" fill="#13294c"/>
+     <circle cx="295" cy="278" r="17" fill="#d7edff" opacity=".8"/>
+     <circle cx="465" cy="298" r="12" fill="#59d5cb"/>
+     <rect x="267" y="419" width="93" height="66" rx="12" fill="#2b3655"/>
+     <path d="M222 486 L410 486 L437 515 L196 515 Z" fill="#61718a"/>
+   </g>
+  <rect x="44" y="44" rx="14" width="148" height="39" fill="#456d9e" opacity=".11"/>
+  <text x="62" y="70" fill="#456d9e" font-family="Arial,Segoe UI,sans-serif" font-size="19" font-weight="bold" letter-spacing="3">OPENSHOP</text>
+  <text x="48" y="675" fill="#7685a3" font-family="Arial,Segoe UI,sans-serif" font-size="18" letter-spacing="2">TECH ESSENTIALS</text>
+ </svg>

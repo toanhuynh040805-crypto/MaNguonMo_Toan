@@ -30,6 +30,21 @@ class Product extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        return $this->image_path ? Storage::disk('public')->url($this->image_path) : null;
+        // An uploaded product photo always takes precedence over the bundled
+        // demo illustration. Do not overwrite saved local images on upgrade.
+        if ($this->image_path) {
+            return Storage::disk('public')->url($this->image_path);
+        }
+
+        // Bundled, original SVG images live in public/ and are immediately
+        // available after git pull, even for existing seeded database rows.
+        $slug = $this->slug;
+        if (is_string($slug)
+            && preg_match('/^[a-z0-9-]+$/D', $slug)
+            && is_file(public_path('images/products/' . $slug . '.svg'))) {
+            return asset('images/products/' . $slug . '.svg');
+        }
+
+        return null;
     }
 }

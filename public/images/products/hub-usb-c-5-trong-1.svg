@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Ảnh minh họa hub-usb-c-5-trong-1">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8faff"/><stop offset=".58" stop-color="#f1ecfa"/><stop offset="1" stop-color="#e9eff9"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#ffffff" stop-opacity=".8"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="960" height="720" fill="url(#bg)"/>
+  <circle cx="770" cy="190" r="320" fill="url(#halo)" />
+  <circle cx="105" cy="580" r="210" fill="#8a66ad" opacity=".06"/>
+  <path d="M0 610 Q480 490 960 610 L960 720 L0 720 Z" fill="#fff" opacity=".36"/>
+  <g transform="translate(120 115) rotate(-10 360 240)">
+      <ellipse cx="367" cy="478" rx="314" ry="27" fill="#182944" opacity=".17"/>
+      <path d="M614 248 C675 225 675 131 735 98" stroke="#2a344c" stroke-width="28" stroke-linecap="round" fill="none"/>
+      <rect x="716" y="61" width="66" height="75" rx="14" fill="#a5b3ca"/>
+      <rect x="730" y="51" width="38" height="32" rx="8" fill="#51677a"/>
+      <rect x="97" y="219" width="550" height="217" rx="42" fill="#293852" stroke="#c1cedc" stroke-width="8"/>
+      <rect x="117" y="234" width="509" height="166" rx="24" fill="#8a66ad" opacity=".45"/>
+      <rect x="150" y="267" width="200" height="15" rx="7" fill="#d7e4f4" opacity=".6"/>
+      $<rect x="162" y="336" width="53" height="26" rx="6" fill="#101e36" stroke="#8aa7c9" stroke-width="5"/><rect x="240" y="336" width="53" height="26" rx="6" fill="#101e36" stroke="#8aa7c9" stroke-width="5"/><rect x="318" y="336" width="53" height="26" rx="6" fill="#101e36" stroke="#8aa7c9" stroke-width="5"/><rect x="396" y="336" width="53" height="26" rx="6" fill="#101e36" stroke="#8aa7c9" stroke-width="5"/>
+      <circle cx="550" cy="342" r="11" fill="#65e0df"/>
+    </g>
+  <rect x="44" y="44" rx="14" width="148" height="39" fill="#8a66ad" opacity=".11"/>
+  <text x="62" y="70" fill="#8a66ad" font-family="Arial,Segoe UI,sans-serif" font-size="19" font-weight="bold" letter-spacing="3">OPENSHOP</text>
+  <text x="48" y="675" fill="#7685a3" font-family="Arial,Segoe UI,sans-serif" font-size="18" letter-spacing="2">TECH ESSENTIALS</text>
+ </svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Ảnh minh họa chuot-bluetooth-dual-mode">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8faff"/><stop offset=".58" stop-color="#e3efff"/><stop offset="1" stop-color="#e9eff9"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#ffffff" stop-opacity=".8"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="960" height="720" fill="url(#bg)"/>
+  <circle cx="770" cy="190" r="320" fill="url(#halo)" />
+  <circle cx="105" cy="580" r="210" fill="#4568a3" opacity=".06"/>
+  <path d="M0 610 Q480 490 960 610 L960 720 L0 720 Z" fill="#fff" opacity=".36"/>
+  <g transform="translate(297 120) rotate(13 170 220)">
+      <ellipse cx="175" cy="475" rx="143" ry="25" opacity=".17" fill="#192542"/>
+      <path d="M172 25 C55 18 25 126 32 278 C36 408 82 454 171 453 C263 453 313 397 315 266 C318 127 284 27 172 25 Z" fill="#303f5d" stroke="#a2abc5" stroke-width="6"/>
+      <path d="M172 33 C94 26 51 103 53 222 C53 252 64 269 83 275 L254 275 C283 260 288 231 287 198 C280 103 249 35 172 33 Z" fill="#405373"/>
+      <path d="M171 28 L171 203" stroke="#8897b9" stroke-width="5" opacity=".7"/>
+      <rect x="155" y="148" width="33" height="64" rx="16" fill="#4568a3"/>
+      <rect x="165" y="161" width="13" height="33" rx="6" fill="#e2f8fb"/>
+      <rect x="143" y="370" width="46" height="8" rx="4" fill="#4568a3"/>
+      <path d="M95 314 C135 343 209 348 260 306" fill="none" stroke="#4568a3" stroke-width="8" opacity=".68"/>
+    </g>
+  <rect x="44" y="44" rx="14" width="148" height="39" fill="#4568a3" opacity=".11"/>
+  <text x="62" y="70" fill="#4568a3" font-family="Arial,Segoe UI,sans-serif" font-size="19" font-weight="bold" letter-spacing="3">OPENSHOP</text>
+  <text x="48" y="675" fill="#7685a3" font-family="Arial,Segoe UI,sans-serif" font-size="18" letter-spacing="2">TECH ESSENTIALS</text>
+ </svg>

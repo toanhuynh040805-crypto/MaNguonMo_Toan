@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Ảnh minh họa lot-chuot-xl">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8faff"/><stop offset=".58" stop-color="#f1edfb"/><stop offset="1" stop-color="#e9eff9"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#ffffff" stop-opacity=".8"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="960" height="720" fill="url(#bg)"/>
+  <circle cx="770" cy="190" r="320" fill="url(#halo)" />
+  <circle cx="105" cy="580" r="210" fill="#7759b8" opacity=".06"/>
+  <path d="M0 610 Q480 490 960 610 L960 720 L0 720 Z" fill="#fff" opacity=".36"/>
+  <g transform="translate(100 116) rotate(-9 380 262)">
+    <ellipse cx="380" cy="526" rx="319" ry="31" fill="#182441" opacity=".16"/>
+    <rect x="70" y="129" width="685" height="371" rx="46" fill="#1c253e" stroke="#7759b8" stroke-width="10"/>
+    <rect x="104" y="163" width="618" height="305" rx="29" fill="#2c3658"/>
+    <path d="M104 413 C296 278 430 411 722 197 L722 469 L104 469 Z" fill="#7759b8" opacity=".36"/>
+    <path d="M157 376 C363 269 477 416 683 259" fill="none" stroke="#9f9dea" stroke-width="9" opacity=".55"/>
+    <rect x="544" y="411" width="148" height="13" rx="6" fill="#f7f8fc" opacity=".6"/>
+  </g>
+  <rect x="44" y="44" rx="14" width="148" height="39" fill="#7759b8" opacity=".11"/>
+  <text x="62" y="70" fill="#7759b8" font-family="Arial,Segoe UI,sans-serif" font-size="19" font-weight="bold" letter-spacing="3">OPENSHOP</text>
+  <text x="48" y="675" fill="#7685a3" font-family="Arial,Segoe UI,sans-serif" font-size="18" letter-spacing="2">TECH ESSENTIALS</text>
+ </svg>

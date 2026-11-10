@@ -2,6 +2,14 @@
 
 > Đồ án môn **Lập trình mã nguồn mở** – Đề tài 03 – HUIT. Mã nguồn phục vụ học tập.
 
+## Hình ảnh sản phẩm (đã bao gồm trong repository)
+
+- **15 sản phẩm mẫu** có ảnh minh họa SVG riêng, được lưu ở `public/images/products/`. Banner trang chủ sử dụng `public/images/hero-tech.svg`.
+- Đây là **minh họa vector tự tạo phục vụ đồ án**, không phải ảnh chụp sản phẩm thương mại, hình chính hãng hay bằng chứng về thương hiệu.
+- Ảnh có sẵn ngay khi chạy `git pull origin main` và `Ctrl + F5`; **không cần chạy lại `db:seed` hay tạo mới database**. Các sản phẩm mẫu đã có trong MySQL vẫn được giữ nguyên.
+- Admin có thể thay minh họa bằng ảnh JPG/PNG/WebP thật tại **Admin → Sản phẩm → Sửa → Tải ảnh**. Ảnh do Admin upload lưu trong `storage/app/public/products/` và **được ưu tiên hiển thị** so với minh họa SVG có sẵn. Ảnh upload không tự push lên GitHub.
+- Sản phẩm mới do Admin tạo mà chưa upload ảnh sẽ hiển thị biểu tượng danh mục để tránh đường dẫn ảnh bị hỏng.
+
 ## Chức năng
 
 - **Khách:** đăng ký, đăng nhập, đăng xuất; xem/tìm/lọc/sắp xếp sản phẩm, phân trang.
