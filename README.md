@@ -2,13 +2,13 @@
 
 > Đồ án môn **Lập trình mã nguồn mở** – Đề tài 03 – HUIT. Mã nguồn phục vụ học tập.
 
-## Hình ảnh sản phẩm (đã bao gồm trong repository)
+## Ảnh chụp sản phẩm thật (Wikimedia Commons) — không phải ảnh AI
 
-- **15 sản phẩm mẫu** có ảnh minh họa SVG riêng, được lưu ở `public/images/products/`. Banner trang chủ sử dụng `public/images/hero-tech.svg`.
-- Đây là **minh họa vector tự tạo phục vụ đồ án**, không phải ảnh chụp sản phẩm thương mại, hình chính hãng hay bằng chứng về thương hiệu.
-- Ảnh có sẵn ngay khi chạy `git pull origin main` và `Ctrl + F5`; **không cần chạy lại `db:seed` hay tạo mới database**. Các sản phẩm mẫu đã có trong MySQL vẫn được giữ nguyên.
-- Admin có thể thay minh họa bằng ảnh JPG/PNG/WebP thật tại **Admin → Sản phẩm → Sửa → Tải ảnh**. Ảnh do Admin upload lưu trong `storage/app/public/products/` và **được ưu tiên hiển thị** so với minh họa SVG có sẵn. Ảnh upload không tự push lên GitHub.
-- Sản phẩm mới do Admin tạo mà chưa upload ảnh sẽ hiển thị biểu tượng danh mục để tránh đường dẫn ảnh bị hỏng.
+- **15 sản phẩm mẫu** được liên kết với 15 ảnh chụp thiết bị thật trên Wikimedia Commons có giấy phép mở. Danh sách tác giả/giấy phép: `resources/data/real_product_photos.json` và trang `/nguon-anh`.
+- Ảnh chụp là của những thiết bị **cùng loại** (ví dụ ảnh SSD dung lượng khác), không đại diện đúng model/thông số. Giữ rõ ghi chú `Ảnh chụp tham khảo` trên sản phẩm; ảnh nguồn thuộc giấy phép CC riêng của từng tác giả.
+- Ảnh được phục vụ từ `public/images/real-products/<slug>.webp` nếu đã có file tải về. Khi chưa có file local, website dùng ảnh thật qua URL Wikimedia Commons (cần internet). Tập tin downloader `scripts/download_real_product_photos.py` có thể tải 15 ảnh thật và chuyển về WebP. Không cần chạy lại Seeder hoặc tạo database.
+- Admin có thể thay ảnh bằng ảnh đúng mặt hàng tại **Admin → Sản phẩm → Sửa → Tải ảnh**. Ảnh upload lưu trong `storage/app/public/products/`, được ưu tiên hơn ảnh tham khảo và không tự push GitHub.
+- Sản phẩm mới do Admin tạo mà chưa upload ảnh vẫn hiển thị biểu tượng danh mục. **Ghi nguồn rõ ràng:** mỗi ảnh trong manifest có tác giả, liên kết gốc và đường dẫn giấy phép.
 
 ## Chức năng
 

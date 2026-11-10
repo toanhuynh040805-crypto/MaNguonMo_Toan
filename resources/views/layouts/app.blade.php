@@ -63,7 +63,7 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between flex-wrap gap-3 align-items-start">
             <div><div class="brand mb-2"><span class="brand-mark">O</span>OpenShop<span class="brand-dot">.</span></div><p class="text-muted mb-0 small">Đồ án Lập trình mã nguồn mở · Laravel + MySQL</p></div>
-            <div class="small text-muted">Website demo học tập · Phương thức thanh toán: COD<br>© {{ date('Y') }} OpenShop</div>
+            <div class="small text-muted">Website demo học tập · Thanh toán: COD<br><a href="{{ route('photos.credits') }}">Nguồn và giấy phép ảnh sản phẩm</a><br>© {{ date('Y') }} OpenShop</div>
         </div>
     </div>
 </footer>

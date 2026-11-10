@@ -563,7 +563,7 @@ class OnlineShopTest extends TestCase
     }
 
 
-    public function test_all_demo_catalog_images_are_committed_as_local_svg_files(): void
+    public function test_all_demo_catalog_photos_have_original_sources_and_open_licenses(): void
     {
         $slugs = [
             'ban-phim-co-mini-68',
@@ -584,12 +584,14 @@ class OnlineShopTest extends TestCase
         ];
 
         foreach ($slugs as $slug) {
-            $this->assertFileExists(public_path('images/products/' . $slug . '.svg'));
+            $photo = \App\Support\RealProductPhotos::forSlug($slug);
+            $this->assertNotNull($photo);
+            $this->assertStringStartsWith('https://commons.wikimedia.org/wiki/File:', $photo['source_url']);
+            $this->assertStringStartsWith('https://creativecommons.org/', $photo['license_url']);
         }
-        $this->assertFileExists(public_path('images/hero-tech.svg'));
     }
 
-    public function test_seeded_product_uses_committed_artwork_without_changing_database(): void
+    public function test_seeded_product_shows_real_photograph_url_without_changing_database(): void
     {
         $category = Category::create(['name' => 'Bàn phím', 'slug' => 'ban-phim']);
         $product = Product::create([
@@ -602,11 +604,12 @@ class OnlineShopTest extends TestCase
         ]);
 
         $this->assertNull($product->image_path);
-        $this->assertStringContainsString(
-            '/images/products/ban-phim-co-mini-68.svg', $product->image_url
-        );
-        $this->get(route('home'))->assertOk()
-            ->assertSee('images/products/ban-phim-co-mini-68.svg', false);
+        $photo = \App\Support\RealProductPhotos::forSlug($product->slug);
+        $this->assertNotNull($photo);
+        $this->assertSame('Beautiful Mechanical Keyboard.jpg', $photo['file']);
+        $this->assertStringContainsString('wiki', $product->image_url);
+        $this->get(route('home'))->assertOk()->assertSee('Ảnh chụp tham khảo');
+        $this->get(route('photos.credits'))->assertOk()->assertSee('Anirban Saha');
     }
 
     public function test_uploaded_product_image_has_priority_over_demo_artwork(): void
@@ -625,7 +628,7 @@ class OnlineShopTest extends TestCase
         $this->assertStringContainsString(
             '/storage/products/custom-image.jpg', $product->image_url
         );
-        $this->assertStringNotContainsString('.svg', $product->image_url);
+        $this->assertStringNotContainsString('Special:Redirect', $product->image_url);
     }
 
 }

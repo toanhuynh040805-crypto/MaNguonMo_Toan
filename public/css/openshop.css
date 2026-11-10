@@ -33,6 +33,9 @@ body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sa
 .product-art:nth-of-type(odd) { background:linear-gradient(145deg,#f2f0ff,#e8eaff); }
 .product-art img { display:block; width:100%; height:100%; object-fit:cover; }
 .product-art img[src$=".svg"] { object-position:center; }
+.product-art:has(img) { background:#f6f7fa; }
+.product-art:has(img[src*="real-products"]) img, .product-art:has(img[src*="Special"]) img { object-fit:contain; padding:10px; }
+.photo-ref-label { position:absolute; bottom:9px; left:10px; border-radius:7px; background:rgba(255,255,255,.88); padding:4px 7px; color:#48546b; font-size:.65rem; font-weight:700; }
 .product-art-icon { font-size:5rem; filter:drop-shadow(0 13px 9px rgba(78,73,135,.15)); transform:rotate(-11deg); }
 .product-art-label { position:absolute; left:16px; bottom:13px; font-weight:800; font-size:.55rem; letter-spacing:.2em; color:#9da4c6; }
 .product-name { min-height:2.5em; line-height:1.35; }

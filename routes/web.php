@@ -13,6 +13,7 @@ use App\Http\Controllers\Shop\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
+Route::view('/nguon-anh', 'shop.photo-credits')->name('photos.credits');
 Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 Route::middleware('guest')->group(function (): void {

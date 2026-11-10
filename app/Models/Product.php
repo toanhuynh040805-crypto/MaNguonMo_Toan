@@ -36,13 +36,13 @@ class Product extends Model
             return Storage::disk('public')->url($this->image_path);
         }
 
-        // Bundled, original SVG images live in public/ and are immediately
-        // available after git pull, even for existing seeded database rows.
+        // Real photos are actual Wikimedia Commons photographs, not AI illustrations.
+        // Local optimized images (if downloaded) take priority over remote URLs.
         $slug = $this->slug;
-        if (is_string($slug)
-            && preg_match('/^[a-z0-9-]+$/D', $slug)
-            && is_file(public_path('images/products/' . $slug . '.svg'))) {
-            return asset('images/products/' . $slug . '.svg');
+        $photo = \App\Support\RealProductPhotos::forSlug($slug);
+        if ($photo) {
+            return \App\Support\RealProductPhotos::localUrl($slug)
+                ?? \App\Support\RealProductPhotos::remoteUrl($photo);
         }
 
         return null;
