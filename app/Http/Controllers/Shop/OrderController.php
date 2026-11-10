@@ -17,18 +17,21 @@ class OrderController extends Controller
             'status' => ['nullable', 'in:pending,confirmed,shipping,completed,cancelled'],
             'q' => ['nullable', 'string', 'max:30'],
         ]);
-        $orders = $request->user()->orders()
-            ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('status', $status))
-            ->when($filters['q'] ?? null, function ($query, $term): void {
-                // Only search numeric order codes; do not expose other customers' orders.
-                $term = trim($term);
-                if (preg_match('/^(?:DH0*)?([0-9]+)$/i', $term, $matches)) {
-                    $query->where('id', (int) $matches[1]);
-                } else {
-                    $query->whereRaw('1 = 0');
-                }
-            })
-            ->latest()->paginate(10)->withQueryString();
+
+        // Begin with the user ID restriction so search can never leak other users' orders.
+        $query = Order::query()->where('user_id', $request->user()->id);
+        if (filled($filters['status'] ?? null)) {
+            $query->where('status', $filters['status']);
+        }
+        if (filled($filters['q'] ?? null)) {
+            $term = trim($filters['q']);
+            if (preg_match('/^(?:DH0*)?([0-9]+)$/i', $term, $matches)) {
+                $query->where('orders.id', (int) $matches[1]);
+            } else {
+                $query->whereRaw('1 = 0');
+            }
+        }
+        $orders = $query->latest()->paginate(10)->withQueryString();
 
         return view('shop.orders.index', compact('orders'));
     }
