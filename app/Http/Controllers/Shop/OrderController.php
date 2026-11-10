@@ -23,7 +23,7 @@ class OrderController extends Controller
                 // Only search numeric order codes; do not expose other customers' orders.
                 $term = trim($term);
                 if (preg_match('/^(?:DH0*)?([0-9]+)$/i', $term, $matches)) {
-                    $query->whereKey((int) $matches[1]);
+                    $query->where('id', (int) $matches[1]);
                 } else {
                     $query->whereRaw('1 = 0');
                 }
