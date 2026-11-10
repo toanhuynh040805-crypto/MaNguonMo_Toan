@@ -13,15 +13,38 @@ class OrderController extends Controller
 {
     public function index(Request $request): View
     {
-        $orders = $request->user()->orders()->latest()->paginate(10);
+        $filters = $request->validate([
+            'status' => ['nullable', 'in:pending,confirmed,shipping,completed,cancelled'],
+            'q' => ['nullable', 'string', 'max:30'],
+        ]);
+        $orders = $request->user()->orders()
+            ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('status', $status))
+            ->when($filters['q'] ?? null, function ($query, $term): void {
+                // Only search numeric order codes; do not expose other customers' orders.
+                $term = trim($term);
+                if (preg_match('/^(?:DH0*)?([0-9]+)$/i', $term, $matches)) {
+                    $query->whereKey((int) $matches[1]);
+                } else {
+                    $query->whereRaw('1 = 0');
+                }
+            })
+            ->latest()->paginate(10)->withQueryString();
+
         return view('shop.orders.index', compact('orders'));
     }
 
     public function show(Request $request, Order $order): View
     {
         abort_unless($order->user_id === $request->user()->id, 403);
-        $order->load('items');
+        $order->load(['items', 'statusHistories']);
         return view('shop.orders.show', compact('order'));
+    }
+
+    public function receipt(Request $request, Order $order): View
+    {
+        abort_unless($order->user_id === $request->user()->id, 403);
+        $order->load('items');
+        return view('orders.receipt', compact('order'));
     }
 
     public function cancel(Request $request, Order $order): RedirectResponse
@@ -34,6 +57,11 @@ class OrderController extends Controller
                 return false;
             }
             $locked->update(['status' => 'cancelled']);
+            $locked->statusHistories()->create([
+                'actor_id' => $request->user()->id,
+                'from_status' => 'pending',
+                'to_status' => 'cancelled',
+            ]);
             foreach ($locked->items as $item) {
                 if ($item->product_id !== null) {
                     \App\Models\Product::whereKey($item->product_id)->increment('stock', $item->quantity);

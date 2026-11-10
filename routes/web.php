@@ -17,7 +17,7 @@ Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/dang-ky', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/dang-ky', [AuthController::class, 'register'])->name('register.store');
+    Route::post('/dang-ky', [AuthController::class, 'register'])->middleware('throttle:5,1')->name('register.store');
     Route::get('/dang-nhap', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/dang-nhap', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.store');
 });
@@ -38,6 +38,7 @@ Route::middleware(['auth', 'role:customer'])->group(function (): void {
     Route::post('/thanh-toan', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/don-hang', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/don-hang/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/don-hang/{order}/phieu', [OrderController::class, 'receipt'])->name('orders.receipt');
     Route::patch('/don-hang/{order}/huy', [OrderController::class, 'cancel'])->name('orders.cancel');
 });
 
@@ -49,5 +50,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Declare export before {order} so it cannot be treated as an order ID.
     Route::get('orders/export', [AdminOrderController::class, 'export'])->name('orders.export');
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::get('orders/{order}/receipt', [AdminOrderController::class, 'receipt'])->name('orders.receipt');
     Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
 });

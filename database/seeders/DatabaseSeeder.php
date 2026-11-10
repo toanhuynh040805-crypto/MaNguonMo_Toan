@@ -64,10 +64,20 @@ class DatabaseSeeder extends Seeder
         $email = env('SEED_ADMIN_EMAIL');
         $password = env('SEED_ADMIN_PASSWORD');
         if ($email && $password && strlen($password) >= 12) {
-            User::updateOrCreate(
-                ['email' => $email],
-                ['name' => 'Quản trị OpenShop', 'role' => 'admin', 'password' => Hash::make($password)],
-            );
+            $existing = User::where('email', $email)->first();
+            if ($existing === null) {
+                User::create([
+                    'name' => 'Quản trị OpenShop',
+                    'email' => $email,
+                    'role' => 'admin',
+                    'password' => Hash::make($password),
+                ]);
+            } elseif ($existing->role !== 'admin') {
+                $this->command?->warn('Email Admin đã thuộc tài khoản Customer. Vui lòng dùng email khác.');
+            } else {
+                // Re-running seeders must never silently reset an existing admin password.
+                $this->command?->info('Admin đã tồn tại, giữ nguyên mật khẩu và vai trò hiện có.');
+            }
         } else {
             $this->command?->warn('Chưa tạo Admin. Đặt SEED_ADMIN_EMAIL và SEED_ADMIN_PASSWORD (>=12 ký tự) trong .env rồi chạy php artisan db:seed.');
         }

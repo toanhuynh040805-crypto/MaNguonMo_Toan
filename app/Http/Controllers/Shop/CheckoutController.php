@@ -72,6 +72,12 @@ class CheckoutController extends Controller
                 'total_amount' => $total,
             ]);
 
+            $order->statusHistories()->create([
+                'actor_id' => $request->user()->id,
+                'from_status' => null,
+                'to_status' => 'pending',
+            ]);
+
             foreach ($cart as $id => $quantity) {
                 $product = $products->get((int) $id);
                 $order->items()->create([

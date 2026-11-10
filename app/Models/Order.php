@@ -25,12 +25,12 @@ class Order extends Model
     ];
 
     protected $fillable = [
-        'user_id', 'recipient_name', 'phone', 'address', 'note', 'total_amount', 'status',
+        'user_id', 'recipient_name', 'phone', 'address', 'note', 'total_amount', 'status', 'completed_at',
     ];
 
     protected function casts(): array
     {
-        return ['total_amount' => 'integer'];
+        return ['total_amount' => 'integer', 'completed_at' => 'datetime'];
     }
 
     public function user(): BelongsTo
@@ -41,6 +41,11 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function statusHistories(): HasMany
+    {
+        return $this->hasMany(OrderStatusHistory::class)->orderBy('id');
     }
 
     public function getCodeAttribute(): string

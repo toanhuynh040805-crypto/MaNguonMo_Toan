@@ -55,20 +55,35 @@ class OrderController extends Controller
 
     public function show(Order $order): View
     {
-        $order->load('user', 'items');
+        $order->load(['user', 'items', 'statusHistories.actor']);
         return view('admin.orders.show', compact('order'));
+    }
+
+    public function receipt(Order $order): View
+    {
+        $order->load('items');
+        return view('orders.receipt', compact('order'));
     }
 
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
         $data = $request->validate(['status' => ['required', 'in:confirmed,shipping,completed,cancelled']]);
 
-        $updated = DB::transaction(function () use ($order, $data): bool {
+        $updated = DB::transaction(function () use ($order, $data, $request): bool {
             $locked = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
             if (! in_array($data['status'], Order::TRANSITIONS[$locked->status] ?? [], true)) {
                 return false;
             }
-            $locked->update(['status' => $data['status']]);
+            $oldStatus = $locked->status;
+            $locked->update([
+                'status' => $data['status'],
+                'completed_at' => $data['status'] === 'completed' ? now() : $locked->completed_at,
+            ]);
+            $locked->statusHistories()->create([
+                'actor_id' => $request->user()->id,
+                'from_status' => $oldStatus,
+                'to_status' => $data['status'],
+            ]);
             if ($data['status'] === 'cancelled') {
                 foreach ($locked->items as $item) {
                     if ($item->product_id !== null) {
@@ -88,6 +103,8 @@ class OrderController extends Controller
         return $request->validate([
             'q' => ['nullable', 'string', 'max:100'],
             'status' => ['nullable', 'in:pending,confirmed,shipping,completed,cancelled'],
+            'date_from' => ['nullable', 'date_format:Y-m-d'],
+            'date_to' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:date_from'],
         ]);
     }
 
@@ -95,6 +112,8 @@ class OrderController extends Controller
     {
         return Order::query()->with('user')
             ->when($filters['status'] ?? null, fn (Builder $query, string $status) => $query->where('status', $status))
+            ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->whereDate('created_at', '>=', $date))
+            ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->whereDate('created_at', '<=', $date))
             ->when($filters['q'] ?? null, function (Builder $query, string $term): void {
                 $query->where(function (Builder $sub) use ($term): void {
                     if (ctype_digit($term)) {
