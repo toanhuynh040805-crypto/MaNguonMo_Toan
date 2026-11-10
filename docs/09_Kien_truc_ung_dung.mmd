@@ -4,12 +4,13 @@ flowchart TD
     Admin[Admin] --> Web
     Web --> Router[Laravel Routes + Middleware]
     Router --> Auth[Authentication / Profile]
-    Router --> Store[Shop: Products / Cart / Checkout / Orders]
-    Router --> Manage[Admin: Categories / Products / Orders / Dashboard / CSV]
+    Router --> Store[Shop: Products / Cart / Checkout / Orders / Receipt]
+    Router --> Manage[Admin: Categories / Products / Orders / Dashboard / CSV / Receipt]
     Store --> ORM[Eloquent ORM / Transaction]
     Manage --> ORM
     Auth --> ORM
     ORM --> MySQL[(MySQL / MariaDB)]
+    ORM --> StatusHistory[Order Status History + completed_at]
     Store --> Session[(Session Cart)]
     Manage --> FileStorage[(Public Storage / Images)]
     Web --> Ajax[AJAX add-to-cart]

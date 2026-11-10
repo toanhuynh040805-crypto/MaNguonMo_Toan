@@ -20,16 +20,18 @@
 | 4 | Customer | Mở chi tiết sản phẩm, nhấn + thêm vào giỏ | AJAX fetch / cập nhật số lượng, fallback POST |
 | 5 | Customer | Chỉnh số lượng, kiểm tra giá và tồn kho | Session cart, server validation |
 | 6 | Customer | Đặt hàng COD, xem trang chi tiết đơn | Transaction, Order/OrderItem, snapshot giá, giảm tồn kho |
-| 7 | Admin | Dashboard, xem số đơn chờ, sản phẩm sắp hết | Eloquent aggregate, báo cáo |
+| 7 | Admin | Dashboard, xem số đơn chờ, tồn kho và doanh thu 6 tháng | Eloquent aggregate theo completed_at, báo cáo |
 | 8 | Admin | CRUD một danh mục mới, sản phẩm mới, upload ảnh | Hai CRUD trên các bảng có quan hệ |
-| 9 | Admin | Tìm/lọc đơn và Xuất CSV | Filter + stream download, chống CSV injection |
+| 9 | Admin | Tìm/lọc đơn theo ngày/trạng thái, Xuất CSV và in phiếu | Filter + stream download, bảo vệ CSV, phiếu in |
 | 10 | Admin | Mở đơn vừa tạo và chuyển `pending → confirmed → shipping → completed` | Ràng buộc trạng thái |
-| 11 | Customer | Quay lại lịch sử đơn | Chỉ xem đơn của chính mình |
+| 11 | Customer | Quay lại lịch sử đơn, lọc trạng thái và in phiếu COD | Phân quyền đơn riêng, nhật ký xử lý và in phiếu |
 | 12 | Admin | Tạo một đơn mới để demo hủy khi `pending` hoặc `confirmed` | Hoàn kho đúng một lần |
 
 ## Tình huống đặc biệt nên demo
 
 - Customer truy cập `/admin` hoặc `/admin/orders/export`: HTTP 403.
+- Customer A cố mở `/don-hang/{id}/phieu` của Customer B: HTTP 403.
+- Admin thay trạng thái hợp lệ nhiều lần: nhật ký thay đổi tương ứng; không sinh nhật ký cho thao tác bị từ chối.
 - Admin sửa tồn kho còn 0: sản phẩm vẫn hiển thị nhưng không cho đặt.
 - Customer thêm giỏ vượt tồn: trả lỗi, không ghi đơn.
 - Admin cố xóa sản phẩm đang thuộc đơn chưa kết thúc: bị chặn; có thể chuyển **Hiển thị để bán** thành tắt.

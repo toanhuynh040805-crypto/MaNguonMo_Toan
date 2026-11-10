@@ -25,7 +25,7 @@ Văn bản: **Quy định về giảng dạy và đánh giá môn học Lập tr
 - **Đăng ký tài khoản, quản lý đơn hàng cá nhân**: có.
 - **Admin: quản lý sản phẩm, đơn hàng; Customer: mua hàng**: có.
 
-**Lựa chọn triển khai bổ sung** (không phải quy định bắt buộc): COD, thống kê doanh thu hoàn tất, lưu giá tại thời điểm đặt, trừ/hoàn tồn kho, upload ảnh, lọc đơn theo trạng thái, xuất CSV, giỏ hàng AJAX, trang quản lý tài khoản, theo dõi sắp hết hàng, kiểm soát trạng thái đơn và bảo vệ sản phẩm thuộc đơn chưa kết thúc.
+**Lựa chọn triển khai bổ sung** (không phải quy định bắt buộc): COD, thống kê doanh thu hoàn tất, lưu giá tại thời điểm đặt, trừ/hoàn tồn kho, upload ảnh, lọc đơn theo trạng thái, xuất CSV, giỏ hàng AJAX, trang quản lý tài khoản, theo dõi sắp hết hàng, lịch sử xử lý, phiếu in COD, doanh thu 6 tháng, kiểm soát trạng thái đơn và bảo vệ sản phẩm thuộc đơn chưa kết thúc.
 
 ## 3. Gợi ý chấm điểm trong Quy định giảng dạy (trang 5–6)
 

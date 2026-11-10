@@ -59,15 +59,18 @@ Xuất ảnh từ mã `03_UseCase.puml` và chèn hình minh họa (không sử 
 
 ### 3.3. Mô hình dữ liệu ERD
 
-Xuất ảnh từ `02_ERD.mmd`. Gồm năm bảng nghiệp vụ bổ sung cho các bảng mặc định của Laravel:
+Xuất ảnh từ `02_ERD.mmd`. Gồm sáu bảng nghiệp vụ (tính cả bảng users) bổ sung cho các bảng mặc định của Laravel:
 
 - `users`: người dùng và vai trò.
 - `categories`: nhóm sản phẩm.
 - `products`: sản phẩm, đơn giá VND, tồn kho, ảnh, trạng thái.
 - `orders`: thông tin giao hàng, người mua, tổng tiền, trạng thái.
 - `order_items`: từng dòng hàng, số lượng, giá và thành tiền tại thời điểm mua.
+- `order_status_histories`: nhật ký thay đổi trạng thái đơn, người thực hiện và thời điểm.
 
-**Mối quan hệ:** Category (1)–(N) Product; User (1)–(N) Order; Order (1)–(N) OrderItem; Product (0..1)–(N) OrderItem vì sản phẩm có thể bị xóa nhưng thông tin mua vẫn được lưu.
+`orders.completed_at` cho biết thời điểm đơn hoàn tất, là cơ sở tổng hợp doanh thu tháng.
+
+**Mối quan hệ:** User (0..1)–(N) OrderStatusHistory; Order (1)–(N) OrderStatusHistory; Category (1)–(N) Product; User (1)–(N) Order; Order (1)–(N) OrderItem; Product (0..1)–(N) OrderItem vì sản phẩm có thể bị xóa nhưng thông tin mua vẫn được lưu.
 
 ### 3.4. Luồng đặt hàng
 
@@ -97,6 +100,9 @@ Xuất ảnh từ `02_ERD.mmd`. Gồm năm bảng nghiệp vụ bổ sung cho c�
 7. CRUD danh mục.
 8. CRUD sản phẩm và upload ảnh.
 9. Quản lý đơn và chuyển trạng thái.
+10. Bộ lọc đơn theo ngày/trạng thái và xuất CSV.
+11. Phiếu đơn COD có nút In / Lưu PDF và nhật ký xử lý đơn.
+12. Biểu đồ doanh thu 6 tháng (chỉ tính đơn hoàn tất).
 10. Trang tài khoản và đổi mật khẩu.
 11. Xuất CSV đơn hàng theo bộ lọc.
 12. Dashboard cảnh báo sản phẩm sắp hết và hết hàng.
@@ -126,3 +132,26 @@ Website được thiết kế để đáp ứng những chức năng cơ bản c
 2. Khoa CNTT, HUIT, *Đề cương học phần Lập trình mã nguồn mở*, phiên bản người học cung cấp.
 3. Laravel, *Laravel 12 Documentation*, https://laravel.com/docs/12.x (cần cập nhật ngày truy cập khi hoàn thiện báo cáo).
 4. Bootstrap, *Bootstrap 5 Documentation*, https://getbootstrap.com/docs/5.3/.
+
+
+## PHỤ LỤC A. NGHIỆP VỤ MỞ RỘNG VÀ QUY TẮC DỮ LIỆU
+
+### A.1. Lịch sử chuyển trạng thái
+
+Mỗi lần tạo đơn, hệ thống tạo bản ghi \`order_status_histories\` với trạng thái mới là \`pending\`. Các lần Admin xác nhận, giao hàng, hoàn tất hoặc hủy đơn cũng ghi lại trạng thái trước/sau, thời gian và người thao tác. Nếu thao tác không hợp lệ, trạng thái không đổi và không thêm lịch sử.
+
+### A.2. Hoàn tất và doanh thu
+
+Trường \`completed_at\` chỉ được ghi khi chuyển thành \`completed\`. Biểu đồ thống kê 6 tháng tính tổng \`total_amount\` của những đơn \`completed\` theo tháng \`completed_at\`. Với đơn hoàn tất từ bản cũ, Migration sử dụng \`updated_at\` để ước lượng thời gian hoàn tất ban đầu; cần ghi rõ hạn chế này nếu giải thích số liệu lịch sử.
+
+### A.3. Phiếu xác nhận đơn hàng
+
+Customer chỉ in phiếu đơn của mình; Admin có thể in phiếu mọi đơn thuộc hệ thống. Phiếu là tài liệu demo thể hiện số lượng, đơn giá tại thời điểm đặt và COD; **không phải hóa đơn thuế hay chứng từ đã thanh toán**.
+
+### A.4. Bảo toàn tồn kho
+
+Checkout kiểm tra từng sản phẩm bên trong transaction với khóa dòng. Hủy đơn đang được phép sẽ hoàn lại tồn kho một lần; thao tác hủy lặp lại bị từ chối. Xóa sản phẩm đang thuộc đơn chưa kết thúc bị chặn để không làm mất tham chiếu dùng khi hoàn hàng.
+
+### A.5. Giới hạn triển khai
+
+Dữ liệu đặt hàng là dữ liệu demo, không tích hợp thanh toán trực tuyến, hãng vận chuyển, VAT thực tế, dịch vụ email hay hệ thống thông báo đẩy. Các chức năng này thuộc phạm vi mở rộng trong tương lai.

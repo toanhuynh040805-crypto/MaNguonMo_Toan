@@ -5,9 +5,9 @@
 ## Chức năng
 
 - **Khách:** đăng ký, đăng nhập, đăng xuất; xem/tìm/lọc/sắp xếp sản phẩm, phân trang.
-- **Customer:** quản lý giỏ hàng trong session (thêm nhanh bằng AJAX, vẫn có form POST dự phòng); đặt hàng COD; xem và hủy đơn chờ xác nhận; cập nhật tài khoản, đổi mật khẩu.
-- **Admin:** dashboard doanh thu và cảnh báo tồn kho; CRUD danh mục và sản phẩm (có upload ảnh); tìm kiếm, phân trang, lọc tồn kho; quản lý đơn theo trạng thái và xuất CSV theo bộ lọc.
-- **Dữ liệu:** Eloquent ORM, 5 bảng nghiệp vụ chính gồm `users`, `categories`, `products`, `orders`, `order_items`; Migration, Seeder, Validation, Middleware.
+- **Customer:** quản lý giỏ hàng trong session (thêm nhanh bằng AJAX, vẫn có form POST dự phòng); đặt hàng COD; lọc đơn cá nhân, in phiếu COD và xem lịch sử xử lý; hủy đơn chờ xác nhận; cập nhật tài khoản, đổi mật khẩu.
+- **Admin:** dashboard doanh thu 6 tháng theo ngày hoàn tất, cảnh báo tồn kho; CRUD danh mục và sản phẩm (có upload ảnh); tìm kiếm, phân trang, lọc tồn kho; quản lý đơn theo trạng thái/ngày đặt, in phiếu và xuất CSV theo bộ lọc.
+- **Dữ liệu:** Eloquent ORM, 6 bảng nghiệp vụ gồm `users`, `categories`, `products`, `orders`, `order_items`, `order_status_histories`; Migration, Seeder, Validation, Middleware.
 - **An toàn cơ bản:** CSRF, băm mật khẩu, không cho tự đăng ký Admin, chỉ xem đơn của chính mình, khóa hàng khi đặt và hoàn tồn kho một lần khi hủy; chặn xóa sản phẩm thuộc đơn chưa kết thúc; giảm rủi ro CSV injection.
 
 Sơ đồ ERD, Use Case, kiến trúc, báo cáo, test case, kịch bản demo và phân công nhóm nằm trong `docs/`.
@@ -27,7 +27,7 @@ php artisan serve
 
 - Nếu `php artisan serve` đang chạy, nhấn `Ctrl + C` ở Terminal chạy server trước khi khởi động lại.
 - Nếu `storage:link` báo `The [public/storage] link already exists`, có thể bỏ qua.
-- **KHÔNG chạy `migrate:fresh`**: lệnh đó xóa bảng và dữ liệu hiện có. Mã cập nhật lần này không cần tạo database mới và không thay đổi schema.
+- **KHÔNG chạy `migrate:fresh`**: lệnh đó xóa bảng và dữ liệu hiện có. Mã cập nhật lần này không cần tạo database mới và bổ sung migration cho `completed_at` và bảng `order_status_histories`. Chạy `php artisan migrate` để bổ sung, không xóa dữ liệu cũ.
 - Nếu `git status` hiện có tệp đang sửa, hãy kiểm tra và lưu/commit/stash thay đổi trước khi pull; **không đưa `.env` lên Git**.
 
 ## Cài đặt nhanh trên Windows (Laragon)
@@ -84,6 +84,8 @@ php artisan serve
 
 5. Mở **http://127.0.0.1:8000**. Đăng nhập Admin bằng email/mật khẩu đã tự đặt trong `.env`; tài khoản Customer tạo qua **Đăng ký**.
 
+**Chạy lại Seeder không tự đổi mật khẩu Admin đã có**. Nếu muốn thay mật khẩu, hãy dùng chức năng đổi mật khẩu sau khi đăng nhập.
+
 **Nếu Seeder chưa tạo Admin:** kiểm tra hai biến `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` rồi chạy `php artisan db:seed`.
 
 ## Kiểm thử
@@ -97,7 +99,7 @@ Bộ kiểm thử sử dụng database SQLite in-memory theo cấu hình PHPUnit
 ## Quy trình demo
 
 1. Customer đăng ký/đăng nhập → tìm, lọc sản phẩm → thêm giỏ → sửa số lượng → đặt hàng COD.
-2. Customer xem đơn vừa đặt; Admin đăng nhập → xem đơn và xác nhận → giao hàng → hoàn thành.
+2. Customer xem đơn vừa đặt, lọc và in phiếu COD; Admin xác nhận → giao hàng → hoàn thành; kiểm tra nhật ký xử lý và doanh thu 6 tháng.
 3. Tạo đơn mới; Customer hủy đơn chờ xác nhận → kiểm tra tồn kho được hoàn lại.
 4. Admin CRUD danh mục/sản phẩm, tìm kiếm, phân trang, theo dõi tồn kho và xuất đơn hàng CSV.
 5. Customer vào **Tài khoản** sửa thông tin, đổi mật khẩu; thử đường dẫn `/admin` bằng Customer để kiểm tra phân quyền.
@@ -115,3 +117,26 @@ Bộ kiểm thử sử dụng database SQLite in-memory theo cấu hình PHPUnit
 - [Laravel 12 documentation](https://laravel.com/docs/12.x)
 - Quy định đánh giá môn Lập trình mã nguồn mở, Khoa CNTT HUIT, ngày 06/08/2026.
 - Đề cương học phần Lập trình mã nguồn mở của HUIT.
+
+
+## Khắc phục lỗi thường gặp trên máy Windows
+
+- **ERR_CONNECTION_REFUSED tại 127.0.0.1:8000**: kiểm tra Terminal VS Code còn chạy \`php artisan serve\` hay không; chạy lại nếu server đã dừng.
+- **\`mysql\` is not recognized trong PowerShell**: đây là lỗi PATH của MySQL CLI, không nhất thiết là lỗi MySQL. Bạn có thể dùng **Laragon → Start All → Database (HeidiSQL)** để tạo \`openshop_db\`. Laravel kết nối qua PDO/MySQL nên không bắt buộc CLI \`mysql\` có trong PATH.
+- **\`Nothing to migrate\`**: mọi migration đã chạy, không phải lỗi.
+- **\`composer.lock\` untracked**: đây là tệp lock do Composer sinh trên máy local, nên được commit lên Git để khóa phiên bản gói trước khi triển khai nhóm; không xóa \`vendor\` chỉ để xử lý cảnh báo này.
+- **Lỗi SQLite khi chạy test tại Windows**: bật \`pdo_sqlite\` và \`sqlite3\` trong PHP CLI hoặc xem kết quả test tương ứng trên GitHub Actions.
+- **Trang vẫn như trước sau \`git pull\`**: chạy \`php artisan optimize:clear\`, tải lại Chrome bằng Ctrl+F5; đảm bảo server đang chạy từ đúng thư mục dự án.
+
+## Kiểm tra sau mỗi lần cập nhật
+
+\`\`\`powershell
+cd E:\MaNguonMo\MaNguonMo_Toan
+git pull origin main
+php artisan optimize:clear
+php artisan migrate
+php artisan test --filter=OnlineShopTest
+php artisan serve
+\`\`\`
+
+**Chú ý:** Giữ Terminal chạy \`php artisan serve\`; mở Terminal thứ hai nếu cần chạy thêm lệnh. Dữ liệu sản phẩm và tài khoản trong MySQL được giữ nguyên khi dùng \`php artisan migrate\`.

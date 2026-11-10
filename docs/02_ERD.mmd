@@ -3,6 +3,8 @@ erDiagram
     CATEGORIES ||--o{ PRODUCTS : contains
     ORDERS ||--|{ ORDER_ITEMS : includes
     PRODUCTS o|--o{ ORDER_ITEMS : referenced_by
+    ORDERS ||--o{ ORDER_STATUS_HISTORIES : records
+    USERS o|--o{ ORDER_STATUS_HISTORIES : changes
 
     USERS {
         bigint id PK
@@ -41,6 +43,16 @@ erDiagram
         text note
         bigint total_amount
         varchar status
+        datetime completed_at
+        datetime created_at
+    }
+
+    ORDER_STATUS_HISTORIES {
+        bigint id PK
+        bigint order_id FK
+        bigint actor_id FK
+        varchar from_status
+        varchar to_status
         datetime created_at
     }
 

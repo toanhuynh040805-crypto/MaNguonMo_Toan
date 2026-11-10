@@ -34,6 +34,17 @@
 | TC28 | Xóa sản phẩm | Xóa sản phẩm có đơn đang chờ xác nhận | Bị chặn, có thông báo nên ẩn thay vì xóa | Chưa kiểm thử |
 | TC29 | Thông tin đơn | Thử chèn công thức bảng tính vào tên người nhận, xuất CSV | Dữ liệu CSV không chạy công thức | Chưa kiểm thử |
 
+| TC30 | Đơn cá nhân | Lọc mã đơn và trạng thái | Chỉ hiện đơn hợp lệ của tài khoản đang đăng nhập | Chưa kiểm thử |
+| TC31 | Nhật ký | Tạo đơn và đổi trạng thái thành công | Ghi lịch sử trước/sau và người thực hiện | Chưa kiểm thử |
+| TC32 | Nhật ký | Chuyển trạng thái không hợp lệ | Không tạo bản ghi lịch sử | Chưa kiểm thử |
+| TC33 | Phiếu đơn | Customer in phiếu của chính mình | Hiện snapshot giá, COD, không ghi đã thanh toán | Chưa kiểm thử |
+| TC34 | Phiếu đơn | Customer A mở phiếu của Customer B | HTTP 403 | Chưa kiểm thử |
+| TC35 | Phiếu đơn | Admin in phiếu đơn từ trang quản lý | Có người nhận, đơn hàng và tổng tiền | Chưa kiểm thử |
+| TC36 | Admin | Lọc đơn từ ngày đến ngày | Đúng thời điểm tạo đơn | Chưa kiểm thử |
+| TC37 | CSV | Lọc ngày/trạng thái rồi xuất CSV | Các dòng CSV khớp danh sách đã lọc | Chưa kiểm thử |
+| TC38 | Dashboard | Chuyển đơn thành hoàn tất | Ghi completed_at, doanh thu theo tháng hoàn tất | Chưa kiểm thử |
+| TC39 | Seeder | Chạy db:seed khi Admin đã tồn tại | Không đặt lại mật khẩu Admin | Chưa kiểm thử |
+
 ## Kịch bản demo đề xuất (7–10 phút)
 
 1. Mở trang khách vãng lai, tìm kiếm/lọc sản phẩm.
@@ -51,5 +62,5 @@
 ## Kiểm thử tự động và thủ công
 
 - Chạy `php artisan test` (dùng SQLite in-memory trong `phpunit.xml`) hoặc mở tab GitHub **Actions** để xem kết quả CI theo commit.
-- Bộ `OnlineShopTest` có 27 bài kiểm thử mã nguồn; các tình huống upload ảnh, permission, trạng thái, giao dịch và CSV có test riêng.
+- Bộ `OnlineShopTest` có 34 bài kiểm thử mã nguồn; các tình huống upload ảnh, permission, trạng thái, giao dịch và CSV có test riêng.
 - Kiểm thử giao diện, responsive, UX, luồng demo thực tế trên Laragon vẫn cần thực hiện thủ công; không đánh dấu tự động đạt nếu chưa xem ảnh hoặc thao tác thật.

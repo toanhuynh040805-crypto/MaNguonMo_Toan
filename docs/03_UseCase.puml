@@ -24,6 +24,9 @@ rectangle "HỆ THỐNG BÁN HÀNG OPENSHOP" {
   usecase "Cập nhật tài khoản / đổi mật khẩu" as UC13
   usecase "Xuất CSV đơn hàng" as UC14
   usecase "Theo dõi sản phẩm sắp hết hàng" as UC15
+  usecase "In phiếu đơn hàng COD" as UC16
+  usecase "Xem lịch sử trạng thái đơn" as UC17
+  usecase "Thống kê doanh thu 6 tháng" as UC18
 }
 
 Guest --> UC1
@@ -38,6 +41,8 @@ Customer --> UC6
 Customer --> UC7
 Customer --> UC8
 Customer --> UC13
+Customer --> UC16
+Customer --> UC17
 Admin --> UC4
 Admin --> UC13
 Admin --> UC9
@@ -46,6 +51,9 @@ Admin --> UC11
 Admin --> UC12
 Admin --> UC14
 Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
 
 UC6 ..> UC5 : <<include>>
 @enduml
