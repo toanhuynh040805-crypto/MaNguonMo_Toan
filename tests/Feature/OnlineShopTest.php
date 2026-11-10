@@ -413,4 +413,153 @@ class OnlineShopTest extends TestCase
         $this->assertSame([], session('cart', []));
     }
 
+
+    public function test_checkout_creates_initial_order_status_history(): void
+    {
+        $product = $this->product();
+        $buyer = User::factory()->create(['role' => 'customer']);
+        $this->actingAs($buyer)->post(route('cart.add', $product), ['quantity' => 1]);
+        $this->post(route('checkout.store'), [
+            'recipient_name' => 'Đơn mới', 'phone' => '0901234567', 'address' => 'Địa chỉ demo',
+        ])->assertRedirect();
+
+        $order = Order::firstOrFail();
+        $this->assertDatabaseHas('order_status_histories', [
+            'order_id' => $order->id, 'actor_id' => $buyer->id,
+            'from_status' => null, 'to_status' => 'pending',
+        ]);
+    }
+
+    public function test_admin_status_changes_are_audited_and_completed_at_is_recorded(): void
+    {
+        $buyer = User::factory()->create(['role' => 'customer']);
+        $admin = User::factory()->create(['role' => 'admin']);
+        $order = Order::create([
+            'user_id' => $buyer->id, 'recipient_name' => 'Người nhận',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 250000, 'status' => 'pending',
+        ]);
+        $this->actingAs($admin);
+        foreach (['confirmed', 'shipping', 'completed'] as $status) {
+            $this->patch(route('admin.orders.status', $order), ['status' => $status])
+                ->assertSessionHas('success');
+        }
+        $this->assertNotNull($order->fresh()->completed_at);
+        $this->assertSame(3, $order->statusHistories()->count());
+        $this->assertDatabaseHas('order_status_histories', [
+            'order_id' => $order->id, 'actor_id' => $admin->id,
+            'from_status' => 'shipping', 'to_status' => 'completed',
+        ]);
+        $this->get(route('admin.dashboard'))->assertOk()->assertSee('Doanh thu hoàn tất theo tháng');
+        $this->get(route('admin.orders.show', $order))->assertOk()->assertSee('Lịch sử xử lý');
+    }
+
+    public function test_invalid_transition_does_not_write_history(): void
+    {
+        $buyer = User::factory()->create(['role' => 'customer']);
+        $order = Order::create([
+            'user_id' => $buyer->id, 'recipient_name' => 'Người nhận',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 200000, 'status' => 'pending',
+        ]);
+        $this->actingAs(User::factory()->create(['role' => 'admin']))
+            ->patch(route('admin.orders.status', $order), ['status' => 'completed'])
+            ->assertSessionHas('error');
+        $this->assertDatabaseCount('order_status_histories', 0);
+        $this->assertNull($order->fresh()->completed_at);
+    }
+
+    public function test_customer_cancellation_adds_one_history_record_only(): void
+    {
+        $product = $this->product(stock: 3);
+        $buyer = User::factory()->create(['role' => 'customer']);
+        $this->actingAs($buyer)->post(route('cart.add', $product), ['quantity' => 1]);
+        $this->post(route('checkout.store'), [
+            'recipient_name' => 'Demo', 'phone' => '0901234567', 'address' => 'Địa chỉ',
+        ]);
+        $order = Order::firstOrFail();
+        $this->patch(route('orders.cancel', $order))->assertSessionHas('success');
+        $this->patch(route('orders.cancel', $order))->assertSessionHas('error');
+        $this->assertSame(2, $order->statusHistories()->count());
+        $this->assertDatabaseHas('order_status_histories', [
+            'order_id' => $order->id, 'actor_id' => $buyer->id,
+            'from_status' => 'pending', 'to_status' => 'cancelled',
+        ]);
+    }
+
+    public function test_receipt_authorization_and_cod_notice(): void
+    {
+        $owner = User::factory()->create(['role' => 'customer']);
+        $stranger = User::factory()->create(['role' => 'customer']);
+        $admin = User::factory()->create(['role' => 'admin']);
+        $order = Order::create([
+            'user_id' => $owner->id, 'recipient_name' => 'Người nhận',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 200000, 'status' => 'pending',
+        ]);
+        $order->items()->create([
+            'product_name' => 'Chuột thử nghiệm', 'price' => 200000,
+            'quantity' => 1, 'subtotal' => 200000,
+        ]);
+        $this->get(route('orders.receipt', $order))->assertRedirect(route('login'));
+        $this->actingAs($stranger)->get(route('orders.receipt', $order))->assertForbidden();
+        $this->actingAs($owner)->get(route('orders.receipt', $order))
+            ->assertOk()->assertSee('PHIẾU ĐƠN HÀNG')->assertSee('Chuột thử nghiệm')->assertSee('COD');
+        $this->actingAs($admin)->get(route('admin.orders.receipt', $order))->assertOk();
+        $this->get(route('orders.receipt', $order))->assertForbidden();
+    }
+
+    public function test_customer_order_filters_keep_user_isolation(): void
+    {
+        $owner = User::factory()->create(['role' => 'customer']);
+        $other = User::factory()->create(['role' => 'customer']);
+        $one = Order::create([
+            'user_id' => $owner->id, 'recipient_name' => 'Đơn của tôi',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 120000, 'status' => 'pending',
+        ]);
+        $two = Order::create([
+            'user_id' => $owner->id, 'recipient_name' => 'Đơn đã hủy',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 300000, 'status' => 'cancelled',
+        ]);
+        $strangerOrder = Order::create([
+            'user_id' => $other->id, 'recipient_name' => 'Đơn người khác',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 400000, 'status' => 'pending',
+        ]);
+        $this->actingAs($owner)->get(route('orders.index', ['status' => 'pending']))
+            ->assertOk()->assertSee($one->code)->assertDontSee($two->code)->assertDontSee($strangerOrder->code);
+        $this->get(route('orders.index', ['q' => $two->code]))
+            ->assertOk()->assertSee($two->code)->assertDontSee($one->code);
+        $this->get(route('orders.index', ['status' => 'broken']))->assertSessionHasErrors('status');
+    }
+
+    public function test_admin_order_date_filters_also_apply_to_csv(): void
+    {
+        $buyer = User::factory()->create(['role' => 'customer']);
+        $inside = Order::create([
+            'user_id' => $buyer->id, 'recipient_name' => 'Trong khoảng',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 125000, 'status' => 'pending',
+        ]);
+        $outside = Order::create([
+            'user_id' => $buyer->id, 'recipient_name' => 'Ngoài khoảng',
+            'phone' => '0901234567', 'address' => 'Demo',
+            'total_amount' => 290000, 'status' => 'pending',
+        ]);
+        $inside->forceFill(['created_at' => '2026-04-11 10:00:00'])->saveQuietly();
+        $outside->forceFill(['created_at' => '2026-05-21 10:00:00'])->saveQuietly();
+        $filters = ['date_from' => '2026-04-01', 'date_to' => '2026-04-30'];
+        $this->actingAs(User::factory()->create(['role' => 'admin']))
+            ->get(route('admin.orders.index', $filters))
+            ->assertOk()->assertSee($inside->code)->assertDontSee($outside->code);
+        $csv = $this->get(route('admin.orders.export', $filters))->assertOk()->streamedContent();
+        $this->assertStringContainsString($inside->code, $csv);
+        $this->assertStringNotContainsString($outside->code, $csv);
+        $this->get(route('admin.orders.index', [
+            'date_from' => '2026-05-01', 'date_to' => '2026-04-01',
+        ]))->assertSessionHasErrors('date_to');
+    }
+
 }
