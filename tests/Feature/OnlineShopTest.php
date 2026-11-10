@@ -607,7 +607,9 @@ class OnlineShopTest extends TestCase
         $photo = \App\Support\RealProductPhotos::forSlug($product->slug);
         $this->assertNotNull($photo);
         $this->assertSame('Beautiful Mechanical Keyboard.jpg', $photo['file']);
-        $this->assertStringContainsString('wiki', $product->image_url);
+        $this->assertStringContainsString(
+            '/images/real-products/ban-phim-co-mini-68.webp', $product->image_url
+        );
         $this->get(route('home'))->assertOk()->assertSee('Ảnh chụp tham khảo');
         $this->get(route('photos.credits'))->assertOk()->assertSee('Anirban Saha');
     }
