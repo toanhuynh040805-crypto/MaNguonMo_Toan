@@ -1,0 +1,14 @@
+# Các dòng cần tự điều chỉnh trong .env của project Laravel mới:
+APP_NAME=OpenShop
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=openshop_db
+DB_USERNAME=root
+DB_PASSWORD=
+# ĐẶT TÀI KHOẢN RIÊNG CHO ADMIN TRÊN MÁY DEMO, KHÔNG CHIA SẺ .env
+SEED_ADMIN_EMAIL=admin@example.test
+SEED_ADMIN_PASSWORD="THAY_BANG_MAT_KHAU_RIENG_DAI_HON_12_KY_TU"

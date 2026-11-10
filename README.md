@@ -1,3 +1,97 @@
-# OpenShop - Website Bán Hàng Online
+# OpenShop – Website Bán hàng Online (Laravel 12 + MySQL)
 
-Đồ án Lập trình mã nguồn mở (HUIT), PHP Laravel 12 và MySQL. Tài liệu cài đặt và hướng dẫn nằm trong README sẽ được bổ sung cùng mã nguồn.
+> Đồ án môn **Lập trình mã nguồn mở** – Đề tài 03 – HUIT. Mã nguồn phục vụ học tập.
+
+## Chức năng
+
+- **Khách:** đăng ký, đăng nhập, đăng xuất; xem/tìm/lọc/sắp xếp sản phẩm, phân trang.
+- **Customer:** quản lý giỏ hàng trong session; đặt hàng COD; xem và hủy đơn chờ xác nhận.
+- **Admin:** dashboard; CRUD danh mục và sản phẩm (có upload ảnh); tìm kiếm, phân trang; xem và cập nhật đơn hàng theo luồng.
+- **Dữ liệu:** Eloquent ORM, 5 bảng nghiệp vụ chính gồm `users`, `categories`, `products`, `orders`, `order_items`; Migration, Seeder, Validation, Middleware.
+- **An toàn cơ bản:** CSRF, băm mật khẩu, không cho tự đăng ký Admin, chỉ xem đơn của chính mình, khóa hàng khi đặt và hoàn tồn kho một lần khi hủy.
+
+Sơ đồ ERD, Use Case, báo cáo, test case và phân công nhóm nằm trong `docs/`.
+
+## Cài đặt nhanh trên Windows (Laragon)
+
+**Yêu cầu:** PHP >= 8.2, Composer, MySQL (Laragon), các PHP extensions phổ biến của Laravel (`pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, ...). GitHub chỉ lưu mã nguồn, **không** lưu thư mục `vendor/` hoặc `.env`.
+
+1. Khởi chạy Laragon (MySQL). Mở Terminal:
+
+   ```powershell
+   cd C:\laragon\www
+   git clone https://github.com/toanhuynh040805-crypto/MaNguonMo_Toan.git OpenShop
+   cd OpenShop
+   composer install
+   Copy-Item .env.example .env
+   php artisan key:generate
+   ```
+
+2. Trong HeidiSQL/phpMyAdmin, chạy:
+
+   ```sql
+   CREATE DATABASE openshop_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+
+3. Chỉnh `.env`:
+
+   ```dotenv
+   APP_NAME=OpenShop
+   APP_URL=http://127.0.0.1:8000
+   APP_ENV=local
+   APP_DEBUG=true
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=openshop_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   SESSION_DRIVER=file
+   CACHE_STORE=file
+   QUEUE_CONNECTION=sync
+   SEED_ADMIN_EMAIL=admin@example.test
+   SEED_ADMIN_PASSWORD="TU_DAT_MAT_KHAU_RIENG_TOI_THIEU_12_KY_TU"
+   ```
+
+   **Quan trọng:** Tự thay mật khẩu Admin bằng mật khẩu mạnh (tối thiểu 12 ký tự); không dùng giá trị ví dụ. Nếu MySQL của bạn dùng mật khẩu, chỉnh `DB_PASSWORD`. Không đưa `.env` lên GitHub.
+
+4. Chạy:
+
+   ```powershell
+   php artisan config:clear
+   php artisan migrate --seed
+   php artisan storage:link
+   php artisan serve
+   ```
+
+5. Mở **http://127.0.0.1:8000**. Đăng nhập Admin bằng email/mật khẩu đã tự đặt trong `.env`; tài khoản Customer tạo qua **Đăng ký**.
+
+**Nếu Seeder chưa tạo Admin:** kiểm tra hai biến `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` rồi chạy `php artisan db:seed`.
+
+## Kiểm thử
+
+```powershell
+php artisan test --filter=OnlineShopTest
+```
+
+Bộ kiểm thử sử dụng database SQLite in-memory theo cấu hình PHPUnit; cần extension PHP `pdo_sqlite` và `sqlite3`. GitHub Actions chạy kiểm thử tự động khi push. **Chưa khẳng định kiểm thử thực tế trên máy Windows/Laragon** nếu chưa chạy các lệnh trên.
+
+## Quy trình demo
+
+1. Customer đăng ký/đăng nhập → tìm, lọc sản phẩm → thêm giỏ → sửa số lượng → đặt hàng COD.
+2. Customer xem đơn vừa đặt; Admin đăng nhập → xem đơn và xác nhận → giao hàng → hoàn thành.
+3. Tạo đơn mới; Customer hủy đơn chờ xác nhận → kiểm tra tồn kho được hoàn lại.
+4. Admin CRUD danh mục/sản phẩm, tìm kiếm, phân trang; thử đường dẫn `/admin` bằng Customer để kiểm tra phân quyền.
+
+## Lưu ý triển khai
+
+- **Firebase Hosting tĩnh không chạy được backend Laravel/MySQL.** Cần host PHP + MySQL, document root trỏ đến `public/`, `APP_DEBUG=false`, HTTPS và không công khai `.env`.
+- Bootstrap được tải qua CDN; máy cần mạng để tải phần giao diện mặc định.
+- Thanh toán COD phục vụ demo; không có cổng thanh toán hoặc vận chuyển thật.
+- Có thể đọc đối chiếu yêu cầu, bản mô tả chức năng, Use Case và ERD trong thư mục `docs/`.
+
+## Nguồn tham khảo
+
+- [Laravel 12 documentation](https://laravel.com/docs/12.x)
+- Quy định đánh giá môn Lập trình mã nguồn mở, Khoa CNTT HUIT, ngày 06/08/2026.
+- Đề cương học phần Lập trình mã nguồn mở của HUIT.

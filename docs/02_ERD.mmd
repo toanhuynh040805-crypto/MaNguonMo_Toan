@@ -1,0 +1,55 @@
+erDiagram
+    USERS ||--o{ ORDERS : places
+    CATEGORIES ||--o{ PRODUCTS : contains
+    ORDERS ||--|{ ORDER_ITEMS : includes
+    PRODUCTS o|--o{ ORDER_ITEMS : referenced_by
+
+    USERS {
+        bigint id PK
+        varchar name
+        varchar email UK
+        varchar password
+        varchar role
+        datetime created_at
+    }
+
+    CATEGORIES {
+        bigint id PK
+        varchar name
+        varchar slug UK
+        text description
+    }
+
+    PRODUCTS {
+        bigint id PK
+        bigint category_id FK
+        varchar name
+        varchar slug UK
+        text description
+        bigint price
+        int stock
+        varchar image_path
+        boolean is_active
+    }
+
+    ORDERS {
+        bigint id PK
+        bigint user_id FK
+        varchar recipient_name
+        varchar phone
+        text address
+        text note
+        bigint total_amount
+        varchar status
+        datetime created_at
+    }
+
+    ORDER_ITEMS {
+        bigint id PK
+        bigint order_id FK
+        bigint product_id FK
+        varchar product_name
+        bigint price
+        int quantity
+        bigint subtotal
+    }

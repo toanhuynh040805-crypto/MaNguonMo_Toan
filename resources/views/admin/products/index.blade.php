@@ -1,0 +1,11 @@
+@extends('layouts.admin')
+@section('title', 'Quản lý sản phẩm')
+@section('admin-content')
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4"><h1 class="section-title mb-0">Quản lý sản phẩm</h1><a class="btn btn-primary" href="{{ route('admin.products.create') }}">+ Thêm sản phẩm</a></div>
+<form method="GET" action="{{ route('admin.products.index') }}" class="row g-2 mb-3"><div class="col-md-6"><input name="q" class="form-control" value="{{ request('q') }}" placeholder="Tìm tên sản phẩm..." aria-label="Tìm sản phẩm"></div><div class="col-md-4"><select name="category" class="form-select" aria-label="Lọc danh mục"><option value="">Tất cả danh mục</option>@foreach($categories as $category)<option value="{{ $category->id }}" @selected(request('category') == $category->id)>{{ $category->name }}</option>@endforeach</select></div><div class="col-md-2 d-grid"><button class="btn btn-outline-primary">Lọc</button></div></form>
+<div class="panel overflow-hidden"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>#</th><th>Sản phẩm</th><th>Danh mục</th><th>Giá</th><th>Kho</th><th>Hiển thị</th><th>Thao tác</th></tr></thead><tbody>
+@forelse($products as $product)
+<tr><td>{{ $product->id }}</td><td><div class="d-flex align-items-center gap-2"><x-product-art :product="$product" class="admin-thumbnail" /><strong>{{ $product->name }}</strong></div></td><td>{{ $product->category?->name }}</td><td class="text-nowrap">{{ number_format($product->price, 0, ',', '.') }}₫</td><td>{{ $product->stock }}</td><td><span class="badge text-bg-{{ $product->is_active ? 'success' : 'secondary' }}">{{ $product->is_active ? 'Đang bán' : 'Đã ẩn' }}</span></td><td><div class="d-flex gap-2"><a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-primary">Sửa</a><form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Xóa</button></form></div></td></tr>
+@empty<tr><td colspan="7" class="py-5 text-center text-muted">Không tìm thấy sản phẩm.</td></tr>@endforelse
+</tbody></table></div></div><div class="mt-4">{{ $products->links() }}</div>
+@endsection

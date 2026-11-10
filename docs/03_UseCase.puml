@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách vãng lai" as Guest
+actor "Customer" as Customer
+actor "Admin" as Admin
+
+rectangle "HỆ THỐNG BÁN HÀNG OPENSHOP" {
+  usecase "Xem danh sách / chi tiết\nsản phẩm" as UC1
+  usecase "Tìm kiếm, lọc và phân trang" as UC2
+  usecase "Đăng ký tài khoản" as UC3
+  usecase "Đăng nhập / đăng xuất" as UC4
+  usecase "Quản lý giỏ hàng" as UC5
+  usecase "Đặt hàng COD" as UC6
+  usecase "Theo dõi đơn hàng cá nhân" as UC7
+  usecase "Hủy đơn chờ xác nhận" as UC8
+  usecase "Quản lý danh mục (CRUD)" as UC9
+  usecase "Quản lý sản phẩm (CRUD)" as UC10
+  usecase "Quản lý trạng thái đơn hàng" as UC11
+  usecase "Xem thống kê tổng quan" as UC12
+}
+
+Guest --> UC1
+Guest --> UC2
+Guest --> UC3
+Guest --> UC4
+Customer --> UC1
+Customer --> UC2
+Customer --> UC4
+Customer --> UC5
+Customer --> UC6
+Customer --> UC7
+Customer --> UC8
+Admin --> UC4
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+
+UC6 ..> UC5 : <<include>>
+@enduml
