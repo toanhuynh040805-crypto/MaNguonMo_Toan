@@ -1,25 +1,51 @@
-# Đưa OpenShop lên repository GitHub
+# Hướng dẫn làm việc với GitHub – OpenShop
 
-Repository đích: https://github.com/toanhuynh040805-crypto/MaNguonMo_Toan
+Repository đồ án: https://github.com/toanhuynh040805-crypto/MaNguonMo_Toan
 
-## Cách A: Mở quyền ghi cho ứng dụng GitHub trong ChatGPT
+**Trạng thái:** Mã nguồn website bán hàng Laravel 12 đã được đưa lên nhánh `main`. Không cần tải ZIP để push lại.
 
-GitHub hiện trả lỗi `403 Resource not accessible by integration`, do repository mới chưa được chọn trong GitHub App installation. Đăng nhập GitHub, mở https://github.com/settings/installations/163668750, chọn **Configure**, tại **Repository access** bổ sung `MaNguonMo_Toan` rồi **Save**. Khi đã cấp quyền, có thể yêu cầu ChatGPT đẩy mã nguồn lên nhánh `main` qua GitHub connector.
+## 1. Clone về máy Windows / Laragon
 
-## Cách B: Tự push bằng Git (chỉ dùng khi bạn muốn thao tác trên máy)
-
-1. Tải ZIP và giải nén toàn bộ (các file `app`, `bootstrap`, `config`, `database`, `docs`, `public`, `resources`, `routes`, `tests`, `.github`, `composer.json`, `.env.example`... phải nằm trực tiếp ở thư mục gốc).
-2. Trong terminal tại thư mục đã giải nén, chạy:
+Mở PowerShell hoặc Terminal trong Laragon:
 
 ```powershell
-git init
-git branch -M main
-git remote add origin https://github.com/toanhuynh040805-crypto/MaNguonMo_Toan.git
-git add .
-git commit -m "feat: complete OpenShop Laravel ecommerce coursework"
-git push -u origin main
+cd C:\laragon\www
+git clone https://github.com/toanhuynh040805-crypto/MaNguonMo_Toan.git OpenShop
+cd OpenShop
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
 ```
 
-Không chạy `git push --force`. Nếu báo remote có commit, cần fetch/merge hoặc dùng cách clone repository trước khi chép file. Không đưa `.env`, mật khẩu thật hoặc `vendor/` lên GitHub.
+Tạo cơ sở dữ liệu `openshop_db` trong MySQL, đặt thông tin kết nối và mật khẩu Admin trong `.env`, rồi chạy:
 
-Sau khi push, cài đặt theo `README.md`.
+```powershell
+php artisan migrate --seed
+php artisan storage:link
+php artisan serve
+```
+
+Mở http://127.0.0.1:8000. Xem **README.md** để biết hướng dẫn cấu hình đầy đủ và các bước kiểm thử.
+
+## 2. Cập nhật khi làm việc nhóm
+
+```powershell
+git pull origin main
+# chỉnh sửa và kiểm thử
+php artisan test --filter=OnlineShopTest
+git add .
+git commit -m "feat: mo ta thay doi"
+git push origin main
+```
+
+Khi nhiều thành viên cùng làm, nên tạo nhánh riêng và Pull Request thay vì sửa trực tiếp `main`.
+
+## 3. Lưu ý bảo mật
+
+- Không commit tệp `.env`, mật khẩu, token, thông tin khách hàng thật hoặc thư mục `vendor/`.
+- Chỉ chạy `php artisan migrate:fresh --seed` khi chủ động muốn xóa dữ liệu cũ.
+- Firebase Hosting tĩnh không hỗ trợ trực tiếp backend Laravel/MySQL; cần máy chủ PHP và MySQL.
+
+## 4. Kiểm thử
+
+Workflow `.github/workflows/tests.yml` được cấu hình chạy khi push/Pull Request; xem kết quả trong tab **Actions** của repository.
