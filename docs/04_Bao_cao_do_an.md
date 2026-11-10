@@ -138,11 +138,11 @@ Website được thiết kế để đáp ứng những chức năng cơ bản c
 
 ### A.1. Lịch sử chuyển trạng thái
 
-Mỗi lần tạo đơn, hệ thống tạo bản ghi \`order_status_histories\` với trạng thái mới là \`pending\`. Các lần Admin xác nhận, giao hàng, hoàn tất hoặc hủy đơn cũng ghi lại trạng thái trước/sau, thời gian và người thao tác. Nếu thao tác không hợp lệ, trạng thái không đổi và không thêm lịch sử.
+Mỗi lần tạo đơn, hệ thống tạo bản ghi `order_status_histories` với trạng thái mới là `pending`. Các lần Admin xác nhận, giao hàng, hoàn tất hoặc hủy đơn cũng ghi lại trạng thái trước/sau, thời gian và người thao tác. Nếu thao tác không hợp lệ, trạng thái không đổi và không thêm lịch sử.
 
 ### A.2. Hoàn tất và doanh thu
 
-Trường \`completed_at\` chỉ được ghi khi chuyển thành \`completed\`. Biểu đồ thống kê 6 tháng tính tổng \`total_amount\` của những đơn \`completed\` theo tháng \`completed_at\`. Với đơn hoàn tất từ bản cũ, Migration sử dụng \`updated_at\` để ước lượng thời gian hoàn tất ban đầu; cần ghi rõ hạn chế này nếu giải thích số liệu lịch sử.
+Trường `completed_at` chỉ được ghi khi chuyển thành `completed`. Biểu đồ thống kê 6 tháng tính tổng `total_amount` của những đơn `completed` theo tháng `completed_at`. Với đơn hoàn tất từ bản cũ, Migration sử dụng `updated_at` để ước lượng thời gian hoàn tất ban đầu; cần ghi rõ hạn chế này nếu giải thích số liệu lịch sử.
 
 ### A.3. Phiếu xác nhận đơn hàng
 

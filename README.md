@@ -121,22 +121,22 @@ Bộ kiểm thử sử dụng database SQLite in-memory theo cấu hình PHPUnit
 
 ## Khắc phục lỗi thường gặp trên máy Windows
 
-- **ERR_CONNECTION_REFUSED tại 127.0.0.1:8000**: kiểm tra Terminal VS Code còn chạy \`php artisan serve\` hay không; chạy lại nếu server đã dừng.
-- **\`mysql\` is not recognized trong PowerShell**: đây là lỗi PATH của MySQL CLI, không nhất thiết là lỗi MySQL. Bạn có thể dùng **Laragon → Start All → Database (HeidiSQL)** để tạo \`openshop_db\`. Laravel kết nối qua PDO/MySQL nên không bắt buộc CLI \`mysql\` có trong PATH.
-- **\`Nothing to migrate\`**: mọi migration đã chạy, không phải lỗi.
-- **\`composer.lock\` untracked**: đây là tệp lock do Composer sinh trên máy local, nên được commit lên Git để khóa phiên bản gói trước khi triển khai nhóm; không xóa \`vendor\` chỉ để xử lý cảnh báo này.
-- **Lỗi SQLite khi chạy test tại Windows**: bật \`pdo_sqlite\` và \`sqlite3\` trong PHP CLI hoặc xem kết quả test tương ứng trên GitHub Actions.
-- **Trang vẫn như trước sau \`git pull\`**: chạy \`php artisan optimize:clear\`, tải lại Chrome bằng Ctrl+F5; đảm bảo server đang chạy từ đúng thư mục dự án.
+- **ERR_CONNECTION_REFUSED tại 127.0.0.1:8000**: kiểm tra Terminal VS Code còn chạy `php artisan serve` hay không; chạy lại nếu server đã dừng.
+- **`mysql` is not recognized trong PowerShell**: đây là lỗi PATH của MySQL CLI, không nhất thiết là lỗi MySQL. Bạn có thể dùng **Laragon → Start All → Database (HeidiSQL)** để tạo `openshop_db`. Laravel kết nối qua PDO/MySQL nên không bắt buộc CLI `mysql` có trong PATH.
+- **`Nothing to migrate`**: mọi migration đã chạy, không phải lỗi.
+- **`composer.lock` untracked**: đây là tệp lock do Composer sinh trên máy local, nên được commit lên Git để khóa phiên bản gói trước khi triển khai nhóm; không xóa `vendor` chỉ để xử lý cảnh báo này.
+- **Lỗi SQLite khi chạy test tại Windows**: bật `pdo_sqlite` và `sqlite3` trong PHP CLI hoặc xem kết quả test tương ứng trên GitHub Actions.
+- **Trang vẫn như trước sau `git pull`**: chạy `php artisan optimize:clear`, tải lại Chrome bằng Ctrl+F5; đảm bảo server đang chạy từ đúng thư mục dự án.
 
 ## Kiểm tra sau mỗi lần cập nhật
 
-\`\`\`powershell
+```powershell
 cd E:\MaNguonMo\MaNguonMo_Toan
 git pull origin main
 php artisan optimize:clear
 php artisan migrate
 php artisan test --filter=OnlineShopTest
 php artisan serve
-\`\`\`
+```
 
-**Chú ý:** Giữ Terminal chạy \`php artisan serve\`; mở Terminal thứ hai nếu cần chạy thêm lệnh. Dữ liệu sản phẩm và tài khoản trong MySQL được giữ nguyên khi dùng \`php artisan migrate\`.
+**Chú ý:** Giữ Terminal chạy `php artisan serve`; mở Terminal thứ hai nếu cần chạy thêm lệnh. Dữ liệu sản phẩm và tài khoản trong MySQL được giữ nguyên khi dùng `php artisan migrate`.
