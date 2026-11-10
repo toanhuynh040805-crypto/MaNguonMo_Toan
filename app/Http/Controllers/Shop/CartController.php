@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CartController extends Controller
@@ -32,21 +34,27 @@ class CartController extends Controller
         ]);
     }
 
-    public function add(Request $request, Product $product): RedirectResponse
+    public function add(Request $request, Product $product): RedirectResponse|JsonResponse
     {
         $data = $request->validate(['quantity' => ['required', 'integer', 'min:1', 'max:99']]);
         if (! $product->is_active || $product->stock < 1) {
-            return back()->withErrors(['cart' => 'Sản phẩm hiện không thể mua.']);
+            throw ValidationException::withMessages(['cart' => 'Sản phẩm hiện không thể mua.']);
         }
 
         $cart = $request->session()->get('cart', []);
         $newQuantity = (int) ($cart[$product->id] ?? 0) + (int) $data['quantity'];
         if ($newQuantity > $product->stock || $newQuantity > 99) {
-            return back()->withErrors(['cart' => 'Số lượng vượt quá tồn kho hoặc giới hạn 99 sản phẩm.']);
+            throw ValidationException::withMessages(['cart' => 'Số lượng vượt quá tồn kho hoặc giới hạn 99 sản phẩm.']);
         }
 
         $cart[$product->id] = $newQuantity;
         $request->session()->put('cart', $cart);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Đã thêm sản phẩm vào giỏ hàng.',
+                'cart_count' => array_sum($cart),
+            ]);
+        }
         return redirect()->route('cart.index')->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
     }
 

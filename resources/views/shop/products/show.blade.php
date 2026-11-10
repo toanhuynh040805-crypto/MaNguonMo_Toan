@@ -13,7 +13,7 @@
             <p class="fw-medium {{ $product->stock > 0 ? 'text-success' : 'text-danger' }}">{{ $product->stock > 0 ? '● Còn '.$product->stock.' sản phẩm' : '● Đã hết hàng' }}</p>
             @auth
                 @if(!auth()->user()->isAdmin() && $product->stock > 0)
-                    <form method="POST" action="{{ route('cart.add', $product) }}" class="d-flex flex-wrap gap-3 mt-4">@csrf
+                    <form method="POST" action="{{ route('cart.add', $product) }}" class="d-flex flex-wrap gap-3 mt-4" data-ajax-cart>@csrf
                         <label for="quantity" class="visually-hidden">Số lượng</label><input id="quantity" type="number" name="quantity" min="1" max="{{ min($product->stock, 99) }}" value="1" class="form-control form-control-lg" style="max-width:100px" required>
                         <button class="btn btn-primary btn-lg rounded-pill px-5">🛒 Thêm vào giỏ hàng</button>
                     </form>

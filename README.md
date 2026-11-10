@@ -5,12 +5,30 @@
 ## Chức năng
 
 - **Khách:** đăng ký, đăng nhập, đăng xuất; xem/tìm/lọc/sắp xếp sản phẩm, phân trang.
-- **Customer:** quản lý giỏ hàng trong session; đặt hàng COD; xem và hủy đơn chờ xác nhận.
-- **Admin:** dashboard; CRUD danh mục và sản phẩm (có upload ảnh); tìm kiếm, phân trang; xem và cập nhật đơn hàng theo luồng.
+- **Customer:** quản lý giỏ hàng trong session (thêm nhanh bằng AJAX, vẫn có form POST dự phòng); đặt hàng COD; xem và hủy đơn chờ xác nhận; cập nhật tài khoản, đổi mật khẩu.
+- **Admin:** dashboard doanh thu và cảnh báo tồn kho; CRUD danh mục và sản phẩm (có upload ảnh); tìm kiếm, phân trang, lọc tồn kho; quản lý đơn theo trạng thái và xuất CSV theo bộ lọc.
 - **Dữ liệu:** Eloquent ORM, 5 bảng nghiệp vụ chính gồm `users`, `categories`, `products`, `orders`, `order_items`; Migration, Seeder, Validation, Middleware.
-- **An toàn cơ bản:** CSRF, băm mật khẩu, không cho tự đăng ký Admin, chỉ xem đơn của chính mình, khóa hàng khi đặt và hoàn tồn kho một lần khi hủy.
+- **An toàn cơ bản:** CSRF, băm mật khẩu, không cho tự đăng ký Admin, chỉ xem đơn của chính mình, khóa hàng khi đặt và hoàn tồn kho một lần khi hủy; chặn xóa sản phẩm thuộc đơn chưa kết thúc; giảm rủi ro CSV injection.
 
-Sơ đồ ERD, Use Case, báo cáo, test case và phân công nhóm nằm trong `docs/`.
+Sơ đồ ERD, Use Case, kiến trúc, báo cáo, test case, kịch bản demo và phân công nhóm nằm trong `docs/`.
+
+## ĐÃ CLONE VÀ CHẠY ĐƯỢC WEBSITE? CHỈ CẦN CẬP NHẬT
+
+Mở **Terminal của VS Code** trong thư mục hiện tại (ví dụ `E:\MaNguonMo\MaNguonMo_Toan`), **không clone lại**:
+
+```powershell
+git status
+git pull origin main
+php artisan optimize:clear
+php artisan migrate
+php artisan storage:link
+php artisan serve
+```
+
+- Nếu `php artisan serve` đang chạy, nhấn `Ctrl + C` ở Terminal chạy server trước khi khởi động lại.
+- Nếu `storage:link` báo `The [public/storage] link already exists`, có thể bỏ qua.
+- **KHÔNG chạy `migrate:fresh`**: lệnh đó xóa bảng và dữ liệu hiện có. Mã cập nhật lần này không cần tạo database mới và không thay đổi schema.
+- Nếu `git status` hiện có tệp đang sửa, hãy kiểm tra và lưu/commit/stash thay đổi trước khi pull; **không đưa `.env` lên Git**.
 
 ## Cài đặt nhanh trên Windows (Laragon)
 
@@ -71,17 +89,19 @@ Sơ đồ ERD, Use Case, báo cáo, test case và phân công nhóm nằm trong 
 ## Kiểm thử
 
 ```powershell
-php artisan test --filter=OnlineShopTest
+php artisan test
 ```
 
-Bộ kiểm thử sử dụng database SQLite in-memory theo cấu hình PHPUnit; cần extension PHP `pdo_sqlite` và `sqlite3`. GitHub Actions chạy kiểm thử tự động khi push. **Chưa khẳng định kiểm thử thực tế trên máy Windows/Laragon** nếu chưa chạy các lệnh trên.
+Bộ kiểm thử sử dụng database SQLite in-memory theo cấu hình PHPUnit; cần extension PHP `pdo_sqlite`, `sqlite3`, `gd` (bài test upload ảnh) và `fileinfo`. GitHub Actions chạy kiểm thử tự động khi push. **Chưa khẳng định kiểm thử thực tế trên máy Windows/Laragon** nếu chưa chạy các lệnh trên.
 
 ## Quy trình demo
 
 1. Customer đăng ký/đăng nhập → tìm, lọc sản phẩm → thêm giỏ → sửa số lượng → đặt hàng COD.
 2. Customer xem đơn vừa đặt; Admin đăng nhập → xem đơn và xác nhận → giao hàng → hoàn thành.
 3. Tạo đơn mới; Customer hủy đơn chờ xác nhận → kiểm tra tồn kho được hoàn lại.
-4. Admin CRUD danh mục/sản phẩm, tìm kiếm, phân trang; thử đường dẫn `/admin` bằng Customer để kiểm tra phân quyền.
+4. Admin CRUD danh mục/sản phẩm, tìm kiếm, phân trang, theo dõi tồn kho và xuất đơn hàng CSV.
+5. Customer vào **Tài khoản** sửa thông tin, đổi mật khẩu; thử đường dẫn `/admin` bằng Customer để kiểm tra phân quyền.
+6. Xem kịch bản 8–12 phút trong `docs/08_Kich_ban_demo_hoan_chinh.md`.
 
 ## Lưu ý triển khai
 

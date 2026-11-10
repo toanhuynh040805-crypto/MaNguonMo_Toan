@@ -35,8 +35,9 @@
                     <a class="btn btn-primary rounded-pill px-4" href="{{ route('register') }}">Đăng ký</a>
                 @else
                     @if(!auth()->user()->isAdmin())
-                        <a class="btn btn-light border rounded-pill px-3" href="{{ route('cart.index') }}">🛒 Giỏ hàng <span class="badge bg-dark ms-1">{{ array_sum(session('cart', [])) }}</span></a>
+                        <a class="btn btn-light border rounded-pill px-3" href="{{ route('cart.index') }}">🛒 Giỏ hàng <span class="badge bg-dark ms-1" data-cart-count>{{ array_sum(session('cart', [])) }}</span></a>
                     @endif
+                    <a class="btn btn-light border rounded-pill px-3" href="{{ route('profile.edit') }}">👤 Tài khoản</a>
                     <span class="small text-muted d-none d-xl-block">Xin chào, <strong>{{ auth()->user()->name }}</strong></span>
                     <form method="POST" action="{{ route('logout') }}" class="m-0">@csrf<button class="btn btn-outline-secondary rounded-pill px-3">Đăng xuất</button></form>
                 @endguest
@@ -67,6 +68,7 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/shop.js') }}" defer></script>
 @stack('scripts')
 </body>
 </html>

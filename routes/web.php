@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\OrderController;
@@ -21,6 +22,12 @@ Route::middleware('guest')->group(function (): void {
     Route::post('/dang-nhap', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.store');
 });
 Route::post('/dang-xuat', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('/tai-khoan', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/tai-khoan', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/tai-khoan/mat-khau', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
 
 Route::middleware(['auth', 'role:customer'])->group(function (): void {
     Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
@@ -39,6 +46,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('categories', AdminCategoryController::class)->except('show');
     Route::resource('products', AdminProductController::class)->except('show');
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    // Declare export before {order} so it cannot be treated as an order ID.
+    Route::get('orders/export', [AdminOrderController::class, 'export'])->name('orders.export');
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
 });

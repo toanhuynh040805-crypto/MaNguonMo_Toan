@@ -19,11 +19,14 @@ class ProductController extends Controller
         $data = $request->validate([
             'q' => ['nullable', 'string', 'max:100'],
             'category' => ['nullable', 'integer', 'exists:categories,id'],
+            'stock' => ['nullable', 'in:low,out'],
         ]);
 
         $products = Product::with('category')
             ->when($data['q'] ?? null, fn ($q, $term) => $q->where('name', 'like', '%' . $term . '%'))
             ->when($data['category'] ?? null, fn ($q, $category) => $q->where('category_id', $category))
+            ->when(($data['stock'] ?? null) === 'low', fn ($q) => $q->where('stock', '>', 0)->where('stock', '<=', 5))
+            ->when(($data['stock'] ?? null) === 'out', fn ($q) => $q->where('stock', 0))
             ->latest()->paginate(10)->withQueryString();
 
         return view('admin.products.index', [
@@ -72,6 +75,13 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
+        // Deleting a product referenced by an active order would make a later
+        // cancellation unable to return its reserved stock. Hide it instead.
+        if ($product->orderItems()->whereHas('order', fn ($query) =>
+            $query->whereIn('status', ['pending', 'confirmed', 'shipping']))->exists()) {
+            return back()->with('error', 'Sản phẩm đang thuộc đơn hàng chưa kết thúc. Hãy ẩn sản phẩm thay vì xóa.');
+        }
+
         $image = $product->image_path;
         $product->delete(); // order_items.product_id becomes NULL; history is preserved
         if ($image) {

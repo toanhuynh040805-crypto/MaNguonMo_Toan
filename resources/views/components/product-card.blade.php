@@ -10,7 +10,7 @@
             <div><div class="product-price">{{ number_format($product->price, 0, ',', '.') }}₫</div><div class="tiny text-muted">{{ $product->stock > 0 ? 'Còn '.$product->stock.' sản phẩm' : 'Hết hàng' }}</div></div>
             @auth
                 @if(!auth()->user()->isAdmin() && $product->stock > 0)
-                    <form method="POST" action="{{ route('cart.add', $product) }}" class="m-0">@csrf<input type="hidden" name="quantity" value="1"><button class="btn btn-primary btn-add" title="Thêm vào giỏ" aria-label="Thêm {{ $product->name }} vào giỏ">+</button></form>
+                    <form method="POST" action="{{ route('cart.add', $product) }}" class="m-0" data-ajax-cart>@csrf<input type="hidden" name="quantity" value="1"><button class="btn btn-primary btn-add" title="Thêm vào giỏ" aria-label="Thêm {{ $product->name }} vào giỏ">+</button></form>
                 @endif
             @else
                 @if($product->stock > 0)

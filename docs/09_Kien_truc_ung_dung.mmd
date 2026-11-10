@@ -1,0 +1,16 @@
+flowchart TD
+    Guest[Khách vãng lai] --> Web[Trình duyệt / Bootstrap / Blade]
+    Customer[Customer] --> Web
+    Admin[Admin] --> Web
+    Web --> Router[Laravel Routes + Middleware]
+    Router --> Auth[Authentication / Profile]
+    Router --> Store[Shop: Products / Cart / Checkout / Orders]
+    Router --> Manage[Admin: Categories / Products / Orders / Dashboard / CSV]
+    Store --> ORM[Eloquent ORM / Transaction]
+    Manage --> ORM
+    Auth --> ORM
+    ORM --> MySQL[(MySQL / MariaDB)]
+    Store --> Session[(Session Cart)]
+    Manage --> FileStorage[(Public Storage / Images)]
+    Web --> Ajax[AJAX add-to-cart]
+    Ajax --> Router

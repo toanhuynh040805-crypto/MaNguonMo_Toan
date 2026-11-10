@@ -40,6 +40,7 @@ class AuthController extends Controller
 
         Auth::login($user);
         $request->session()->regenerate();
+        $request->session()->forget('cart');
 
         return redirect()->route('home')->with('success', 'Tạo tài khoản thành công!');
     }
@@ -56,6 +57,8 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
+        // Session carts belong to one authenticated user; never transfer them.
+        $request->session()->forget('cart');
 
         $default = Auth::user()->isAdmin() ? route('admin.dashboard') : route('home');
         return redirect()->intended($default)->with('success', 'Đăng nhập thành công!');

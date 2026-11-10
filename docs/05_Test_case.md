@@ -24,6 +24,15 @@
 | TC18 | Trạng thái | Admin chuyển pending thẳng completed | Từ chối trạng thái không hợp lệ | Chưa kiểm thử |
 | TC19 | Responsive | Thu hẹp màn hình 375px | Navbar, card, form dùng được | Chưa kiểm thử |
 | TC20 | Bảo mật | Gửi role=admin khi đăng ký | Tài khoản vẫn là customer | Chưa kiểm thử |
+| TC21 | Tài khoản | Customer sửa tên, email, gửi thêm `role=admin` | Chỉ cập nhật tên, email; giữ role customer | Chưa kiểm thử |
+| TC22 | Tài khoản | Đổi mật khẩu khi mật khẩu cũ sai | Hiện lỗi validation | Chưa kiểm thử |
+| TC23 | AJAX | Nhấn nút + trên thẻ sản phẩm | Giỏ tăng số lượng, không chuyển trang | Chưa kiểm thử |
+| TC24 | AJAX | Thêm vượt tồn kho | Hiện thông báo lỗi, không tăng giỏ | Chưa kiểm thử |
+| TC25 | CSV | Admin xuất đơn lọc theo trạng thái | Tải CSV UTF-8 đúng bộ lọc | Chưa kiểm thử |
+| TC26 | Phân quyền | Customer mở URL xuất CSV Admin | HTTP 403 | Chưa kiểm thử |
+| TC27 | Tồn kho | Lọc sản phẩm còn 1–5 và bằng 0 | Kết quả khớp bộ lọc | Chưa kiểm thử |
+| TC28 | Xóa sản phẩm | Xóa sản phẩm có đơn đang chờ xác nhận | Bị chặn, có thông báo nên ẩn thay vì xóa | Chưa kiểm thử |
+| TC29 | Thông tin đơn | Thử chèn công thức bảng tính vào tên người nhận, xuất CSV | Dữ liệu CSV không chạy công thức | Chưa kiểm thử |
 
 ## Kịch bản demo đề xuất (7–10 phút)
 
@@ -38,3 +47,9 @@
 9. Thử tình huống sai: Customer truy cập `/admin`, số lượng vượt tồn, form rỗng.
 
 **Lưu ý:** Một đơn `completed` không thể hủy. Nếu cần demo hủy đơn/hồi kho, tạo đơn thứ hai rồi hủy ngay khi còn `pending`.
+
+## Kiểm thử tự động và thủ công
+
+- Chạy `php artisan test` (dùng SQLite in-memory trong `phpunit.xml`) hoặc mở tab GitHub **Actions** để xem kết quả CI theo commit.
+- Bộ `OnlineShopTest` có 27 bài kiểm thử mã nguồn; các tình huống upload ảnh, permission, trạng thái, giao dịch và CSV có test riêng.
+- Kiểm thử giao diện, responsive, UX, luồng demo thực tế trên Laragon vẫn cần thực hiện thủ công; không đánh dấu tự động đạt nếu chưa xem ảnh hoặc thao tác thật.

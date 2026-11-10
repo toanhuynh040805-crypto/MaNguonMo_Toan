@@ -25,7 +25,7 @@ Văn bản: **Quy định về giảng dạy và đánh giá môn học Lập tr
 - **Đăng ký tài khoản, quản lý đơn hàng cá nhân**: có.
 - **Admin: quản lý sản phẩm, đơn hàng; Customer: mua hàng**: có.
 
-**Lựa chọn triển khai bổ sung** (không phải quy định bắt buộc): COD, thống kê doanh thu hoàn tất, lưu snapshot giá sản phẩm, trừ/hoàn tồn kho, upload ảnh, lọc đơn theo trạng thái và kiểm soát trạng thái hợp lệ.
+**Lựa chọn triển khai bổ sung** (không phải quy định bắt buộc): COD, thống kê doanh thu hoàn tất, lưu giá tại thời điểm đặt, trừ/hoàn tồn kho, upload ảnh, lọc đơn theo trạng thái, xuất CSV, giỏ hàng AJAX, trang quản lý tài khoản, theo dõi sắp hết hàng, kiểm soát trạng thái đơn và bảo vệ sản phẩm thuộc đơn chưa kết thúc.
 
 ## 3. Gợi ý chấm điểm trong Quy định giảng dạy (trang 5–6)
 
@@ -49,4 +49,4 @@ Rubric này trình bày cách chia **khác** với bảng *gợi ý* ở văn b�
 
 ## 5. Tiến độ kiểm chứng
 
-Mã nguồn, migration, seeder, Blade views và test mẫu đã được viết. Đã kiểm tra cú pháp PHP trước khi đóng gói. **Chưa được xác nhận chạy end-to-end** trong môi trường cài đặt của người học; kết quả tích hợp và ảnh minh chứng phải thu thập sau khi chạy trên Laragon.
+Mã nguồn, migration, seeder, Blade views và bộ kiểm thử chức năng tự động đã được viết. Máy người học đã chạy Laravel thành công tại `127.0.0.1:8000`, tạo được database và hiển thị 15 sản phẩm mẫu. Các luồng thao tác nâng cao cần kiểm thử thủ công trên máy của nhóm; không tự ghi “Đạt” nếu thiếu kết quả thực tế và ảnh minh chứng. Theo dõi kết quả kiểm thử tự động tại tab **Actions** trên GitHub.

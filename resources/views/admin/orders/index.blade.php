@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Quản lý đơn hàng')
 @section('admin-content')
-<h1 class="section-title mb-4">Quản lý đơn hàng</h1>
+<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-4"><h1 class="section-title mb-0">Quản lý đơn hàng</h1><a class="btn btn-outline-primary" href="{{ route('admin.orders.export', request()->only(['q', 'status'])) }}">⬇ Xuất CSV (theo bộ lọc)</a></div>
 <form method="GET" action="{{ route('admin.orders.index') }}" class="row g-2 mb-3"><div class="col-md-7"><input name="q" class="form-control" value="{{ request('q') }}" placeholder="Tìm mã số đơn, người nhận hoặc email..." aria-label="Tìm đơn hàng"></div><div class="col-md-3"><select name="status" class="form-select" aria-label="Lọc trạng thái"><option value="">Tất cả trạng thái</option>@foreach(\App\Models\Order::STATUSES as $status => $label)<option value="{{ $status }}" @selected(request('status') === $status)>{{ $label }}</option>@endforeach</select></div><div class="col-md-2 d-grid"><button class="btn btn-outline-primary">Lọc</button></div></form>
 <div class="panel overflow-hidden"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Ngày đặt</th><th>Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>
 @forelse($orders as $order)

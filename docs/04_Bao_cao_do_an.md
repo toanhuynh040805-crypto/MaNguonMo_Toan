@@ -49,9 +49,9 @@ Laravel Auth dùng phiên đăng nhập; Middleware giới hạn truy cập tran
 
 **Khách vãng lai:** tìm kiếm/xem sản phẩm, đăng ký, đăng nhập.
 
-**Customer:** quản lý giỏ hàng, đặt hàng COD, xem và hủy đơn đang chờ xác nhận.
+**Customer:** quản lý giỏ hàng (có AJAX thêm sản phẩm), đặt hàng COD, xem và hủy đơn đang chờ xác nhận, cập nhật hồ sơ và mật khẩu.
 
-**Admin:** CRUD danh mục/sản phẩm, theo dõi đơn, cập nhật trạng thái, xem tổng quan.
+**Admin:** CRUD danh mục/sản phẩm, theo dõi đơn, lọc và xuất CSV, cập nhật trạng thái, xem tổng quan doanh thu và cảnh báo tồn kho.
 
 ### 3.2. Sơ đồ Use Case
 
@@ -97,6 +97,9 @@ Xuất ảnh từ `02_ERD.mmd`. Gồm năm bảng nghiệp vụ bổ sung cho c�
 7. CRUD danh mục.
 8. CRUD sản phẩm và upload ảnh.
 9. Quản lý đơn và chuyển trạng thái.
+10. Trang tài khoản và đổi mật khẩu.
+11. Xuất CSV đơn hàng theo bộ lọc.
+12. Dashboard cảnh báo sản phẩm sắp hết và hết hàng.
 
 *Mỗi hình cần chú thích “Hình X.Y – …” và 2–4 câu mô tả nghiệp vụ được trình bày. Chỉ chèn ảnh chụp thật sau khi đã chạy ứng dụng.*
 
@@ -107,6 +110,10 @@ Xuất ảnh từ `02_ERD.mmd`. Gồm năm bảng nghiệp vụ bổ sung cho c�
 - Kiểm tra tách biệt quyền Admin/Customer.
 - Kiểm tra đặt hàng thành công, vượt tồn, lịch sử đơn không bị lộ giữa các Customer.
 - Kiểm tra responsive trên máy tính/điện thoại.
+- Kiểm thử AJAX thêm giỏ và cập nhật số lượng trên navbar; không dùng AJAX khi JavaScript tắt.
+- Kiểm thử xuất CSV theo bộ lọc và kiểm soát dữ liệu người dùng tránh công thức bảng tính.
+- Kiểm thử tài khoản Customer chỉ cập nhật tên/email, không tự thay vai trò; đổi mật khẩu cần mật khẩu hiện tại.
+- Kiểm thử không thể xóa sản phẩm đang thuộc đơn hàng chưa kết thúc.
 - Kiểm tra form validation và thông báo lỗi.
 
 ## KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN (BẢN NHÁP)
