@@ -531,7 +531,7 @@ class OnlineShopTest extends TestCase
         $this->actingAs($owner)->get(route('orders.index', ['status' => 'pending']))
             ->assertOk()->assertSee($one->code)->assertDontSee($two->code)->assertDontSee($strangerOrder->code);
         $this->get(route('orders.index', ['q' => $two->code]))
-            ->assertOk()->assertSee($two->code)->assertDontSee($one->code);
+            ->assertOk()->assertSeeText($two->code)->assertDontSeeText($one->code);
         $this->get(route('orders.index', ['status' => 'broken']))->assertSessionHasErrors('status');
     }
 

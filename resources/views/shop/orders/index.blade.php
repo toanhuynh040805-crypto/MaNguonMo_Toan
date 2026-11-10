@@ -4,7 +4,7 @@
 <div class="container pb-5"><div class="mb-4"><span class="eyebrow text-primary">TÀI KHOẢN</span><h1 class="section-title">Đơn hàng của tôi</h1></div>
     <form method="GET" action="{{ route('orders.index') }}" class="panel p-3 mb-3">
         <div class="row g-2 align-items-end">
-            <div class="col-md-5"><label for="my_order_q" class="form-label small">Mã đơn hàng</label><input id="my_order_q" name="q" class="form-control" maxlength="30" placeholder="Ví dụ: DH000001" value="{{ request('q') }}"></div>
+            <div class="col-md-5"><label for="my_order_q" class="form-label small">Mã đơn hàng</label><input id="my_order_q" name="q" class="form-control" maxlength="30" placeholder="Nhập mã đơn hàng" value="{{ request('q') }}"></div>
             <div class="col-md-4"><label for="my_order_status" class="form-label small">Trạng thái</label><select id="my_order_status" name="status" class="form-select"><option value="">Tất cả trạng thái</option>@foreach(\App\Models\Order::STATUSES as $status => $label)<option value="{{ $status }}" @selected(request('status') === $status)>{{ $label }}</option>@endforeach</select></div>
             <div class="col-md-2 d-grid"><button class="btn btn-primary">Tìm đơn</button></div>
             <div class="col-md-1 text-md-end"><a class="small text-decoration-none" href="{{ route('orders.index') }}">Xóa lọc</a></div>
